@@ -40,6 +40,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
         if(store->getObject()->isCordBelong(event->pos())){
             store->getObject()->SetSelect();
             isSelecting = true;
+            postpoint = event->pos();
             return;
         }
     }

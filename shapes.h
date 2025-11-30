@@ -1,7 +1,6 @@
 #ifndef SHAPES_H
 #define SHAPES_H
 
-#endif // SHAPES_H
 #pragma once
 #include<QPoint>
 #include<QWidget>
@@ -11,7 +10,15 @@
 #include<math.h>
 #include<QPushButton>
 
-class Shape : public QWidget {
+class Prototype : public QWidget {
+    Q_OBJECT
+
+public:
+    Prototype(QWidget *parent = nullptr) : QWidget(parent) {}
+
+};
+
+class Shape : public Prototype {
     Q_OBJECT
 protected:
     int sizeX;
@@ -25,7 +32,7 @@ signals:
 
 
 public:
-    Shape(const QPoint& b, const QPoint& e, QWidget* parent = nullptr) : QWidget(parent) {
+    Shape(const QPoint& b, const QPoint& e, QWidget* parent = nullptr) : Prototype(parent) {
         sizeX = abs(e.x() - b.x());
         sizeY = abs(e.y()- b.y());
     }
@@ -259,6 +266,8 @@ public:
     }
 
 };
+
+#endif // SHAPES_H
 
 
 
