@@ -47,15 +47,17 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
                 return;
             }
         }
-        if(ctrl) store->clearSelection();
+        if(!isSelecting) store->clearSelection();
 
         postpoint = b;
     }
     else if (event->button() == Qt::RightButton){
+        store->clearSelection();
         if(!rubBand){
             rubBand = new QRubberBand(QRubberBand::Rectangle, this);
         }
         rubBand->setGeometry(QRect(b,QSize()));
+        // rubBand->ba
         rubBand->show();
     }
 }
@@ -77,6 +79,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
         if (!isSelecting ){
             if(!s){
                 s = GiveMe();
+                s->SetSelect();
                 s->EditColor(color);
                 store->add(s);
             }
@@ -107,7 +110,14 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *){
         groupResizing = false;
         releaseMouse();
     }
-    if(rubBand)rubBand->hide();
+    if(rubBand && rubBand->isVisible()){
+        for(store->first();!store->eol();store->next()){
+            if(rubBand->geometry().contains(store->getObject()->geometry())){
+                store->getObject()->SetSelect();
+            }
+        }
+        rubBand->hide();
+    }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event){
