@@ -5,6 +5,7 @@
 #include<QMouseEvent>
 #include"mystorage.h"
 #include"shapes.h"
+#include<QRubberBand>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -39,5 +40,7 @@ private:
     bool isSelecting = false;
     bool groupResizing = false;
     QPoint lastResizePos;
+    QRubberBand* rubBand = nullptr;
+
 };
 #endif // MAINWINDOW_H

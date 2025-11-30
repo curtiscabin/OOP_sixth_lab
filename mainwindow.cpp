@@ -27,28 +27,78 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event){
-    qDebug()<<"enter to Click";
+    b = event->pos();
+    if (event->button() == Qt::LeftButton)
+    {
+        qDebug()<<"enter to LeftClick";
 
-    bool ctrl = event->modifiers() & Qt::ControlModifier;
+        bool ctrl = event->modifiers() & Qt::ControlModifier;
 
-    if(!ctrl){
-        store->clearSelection();
-        isSelecting = false;
+        if(!ctrl){
+            store->clearSelection();
+            isSelecting = false;
+        }
+
+        for (store->first();!store->eol();store->next()){
+            if(store->getObject()->isCordBelong(event->pos())){
+                store->getObject()->SetSelect();
+                isSelecting = true;
+                postpoint = event->pos();
+                return;
+            }
+        }
+        if(ctrl) store->clearSelection();
+
+        postpoint = b;
     }
+    else if (event->button() == Qt::RightButton){
+        if(!rubBand){
+            rubBand = new QRubberBand(QRubberBand::Rectangle, this);
+        }
+        rubBand->setGeometry(QRect(b,QSize()));
+        rubBand->show();
+    }
+}
 
-    for (store->first();!store->eol();store->next()){
-        if(store->getObject()->isCordBelong(event->pos())){
-            store->getObject()->SetSelect();
-            isSelecting = true;
-            postpoint = event->pos();
+void MainWindow::mouseMoveEvent(QMouseEvent *event){
+    e = event->pos();
+    if(event->buttons() & Qt::LeftButton){
+        if (groupResizing) {
+            delta = e - lastResizePos;
+            lastResizePos = e;
+
+            for (store->first(); !store->eol(); store->next()) {
+                if(store->getObject()->isSelect_()){
+                    store->getObject()->ResizeThat(delta);
+                }
+            }
             return;
         }
+        if (!isSelecting ){
+            if(!s){
+                s = GiveMe();
+                s->EditColor(color);
+                store->add(s);
+            }
+            s->CreatSize(b,e);
+            s->PaintShape();
+        }
+
+        else{
+            delta = e - postpoint;
+            postpoint = e;
+            for(store->first();!store->eol();store->next()){
+                if(store->getObject()->isSelect_()) {
+                    if(!store->getObject()->MoveShape(delta)){
+                        break;
+                    }
+                }
+            }
+        }
     }
-    if(ctrl) store->clearSelection();
-
-
-    b = event->pos();
-    postpoint = b;
+    else if (event->buttons() & Qt::RightButton){
+        if(rubBand)rubBand->setGeometry(QRect(b,e).normalized());
+    }
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *){
@@ -57,43 +107,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *){
         groupResizing = false;
         releaseMouse();
     }
-}
-
-
-void MainWindow::mouseMoveEvent(QMouseEvent *event){
-    e = event->pos();
-    if (groupResizing) {
-        delta = e - lastResizePos;
-        lastResizePos = e;
-
-        for (store->first(); !store->eol(); store->next()) {
-            if(store->getObject()->isSelect_()){
-                store->getObject()->ResizeThat(delta);
-            }
-        }
-        return;
-    }
-    if (!isSelecting ){
-        if(!s){
-            s = GiveMe();
-            s->EditColor(color);
-            store->add(s);
-        }
-        s->CreatSize(b,e);
-        s->PaintShape();
-    }
-
-    else{
-        delta = e - postpoint;
-        postpoint = e;
-        for(store->first();!store->eol();store->next()){
-            if(store->getObject()->isSelect_()) {
-                if(!store->getObject()->MoveShape(delta)){
-                    break;
-                }
-            }
-        }
-    }
+    if(rubBand)rubBand->hide();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event){
