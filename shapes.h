@@ -47,10 +47,13 @@ public:
 
     void SetSelect(){
         isSelect = true;
-        edit = new QPushButton(this);
-        edit->setFixedSize(20,20);
-        edit->move(sizeX - 20, sizeY - 20);
-        edit->show();
+        if(!edit)
+        {
+            edit = new QPushButton(this);
+            edit->setFixedSize(20,20);
+            edit->move(sizeX - 20, sizeY - 20);
+            edit->show();
+        }
 
         if (edit && this) {
             connect(edit, &QPushButton::pressed, this, &Shape::onEditButtonPressed);
@@ -120,6 +123,8 @@ public:
         if(edit){
             edit->move(sizeX - 20, sizeY - 20);
         }
+
+        update();
     }
 
     void ResizeThat(const QPoint &delta) {
@@ -141,6 +146,8 @@ public:
         if (edit) {
             edit->move(sizeX - 20, sizeY - 20);
         }
+
+        update();
     }
 
 protected slots:
