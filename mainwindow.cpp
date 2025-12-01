@@ -57,7 +57,6 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
             rubBand = new QRubberBand(QRubberBand::Rectangle, this);
         }
         rubBand->setGeometry(QRect(b,QSize()));
-        // rubBand->ba
         rubBand->show();
     }
 }
@@ -83,7 +82,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
                 s->EditColor(color);
                 store->add(s);
             }
-            s->CreatSize(b,e);
+            dynamic_cast<Shape*>(s)->CreatSize(b,e);
             s->PaintShape();
         }
 
@@ -197,3 +196,18 @@ void MainWindow::onShapeEditPressed(Shape *sh)
         grabMouse();
     }
 }
+
+void MainWindow::on_pushButton_group_clicked()
+{
+    group = new Group;
+
+    for(store->first();!store->eol();store->next()){
+        if(store->getObject()->isSelect_()){
+            dynamic_cast<Group*>(group)->push(store->exclude(store->getObject()));
+        }
+    }
+
+    if(!dynamic_cast<Group*>(group)->isEmpty())
+        store->add(group);
+}
+

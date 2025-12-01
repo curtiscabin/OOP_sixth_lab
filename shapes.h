@@ -36,6 +36,10 @@ public:
         update();
     }
 
+    bool isCordBelong(const QPoint& p) override {
+        return this->geometry().contains(p);
+    }
+
     void SetSelect() override {
         isSelect = true;
         if(!edit)

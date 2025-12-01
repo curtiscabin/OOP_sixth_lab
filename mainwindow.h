@@ -5,6 +5,8 @@
 #include<QMouseEvent>
 #include"mystorage.h"
 #include"shapes.h"
+#include"prototype.h"
+#include"group.h"
 #include<QRubberBand>
 
 QT_BEGIN_NAMESPACE
@@ -20,6 +22,9 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+private slots:
+    void on_pushButton_group_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -41,6 +46,7 @@ private:
     bool groupResizing = false;
     QPoint lastResizePos;
     QRubberBand* rubBand = nullptr;
+    Prototype* group = nullptr;
 
 };
 #endif // MAINWINDOW_H

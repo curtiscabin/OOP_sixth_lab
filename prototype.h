@@ -10,9 +10,7 @@ class Prototype : public QWidget {
 public:
     Prototype(QWidget *parent = nullptr) : QWidget(parent) {}
 
-    bool isCordBelong(const QPoint& p){
-        return this->geometry().contains(p);
-    }
+    virtual bool isCordBelong(const QPoint& p) = 0;
 
     virtual void SetSelect() = 0;
 

@@ -1,18 +1,18 @@
 #ifndef MYSTORAGE_H
 #define MYSTORAGE_H
-
+#pragma once
 #endif // MYSTORAGE_H
-#include"shapes.h"
+#include "Prototype.h"
 
 class Node{
 
     Node *next;
-    Shape *shape;
+    Prototype *prototype;
 
-    Node():next(nullptr),shape(nullptr){}
+    Node():next(nullptr),prototype(nullptr){}
 
     ~Node(){
-        if (shape!=nullptr) delete shape;
+        if (prototype!=nullptr) delete prototype;
     }
 
     friend class MyStorage;
@@ -43,10 +43,14 @@ public:
         this->clear();
     }
 
-    void add(Shape *shap){
+    bool isEmpty(){
+        return !head;
+    }
+
+    void add(Prototype *shap){
         qDebug()<<"enter to add";
         Node* node = new Node;
-        node->shape = shap;
+        node->prototype = shap;
         node->next = head;
         head = node;
         current = node;
@@ -67,8 +71,8 @@ public:
     }
 
 
-    Shape *getObject(){
-        return current ? current->shape : nullptr;
+    Prototype *getObject(){
+        return current ? current->prototype : nullptr;
     }
 
     int get_size(){
@@ -97,7 +101,7 @@ public:
         Node* toDelete = nullptr;
 
         while(node){
-            if(node->shape->isSelect_()){
+            if(node->prototype->isSelect_()){
                 toDelete = node;
                 node = node->next;
 
@@ -120,6 +124,35 @@ public:
             }
         }
     }
+
+    Prototype* exclude(Prototype* obj) {
+        Node* prev = nullptr;
+        Node* curr = head;
+        Prototype* toExclude;
+
+        while (curr) {
+            if (curr->prototype == obj) {
+                toExclude = curr->prototype;
+
+                if (prev) {
+                    prev->next = curr->next;
+                } else {
+                    head = curr->next;
+                }
+
+                if (curr == tail) {
+                    tail = prev;
+                }
+                curr->prototype = nullptr;
+                delete curr;
+
+                return toExclude;
+            }
+            prev = curr;
+            curr = curr->next;
+        }
+    }
+
 
 
 

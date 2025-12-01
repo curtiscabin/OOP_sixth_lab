@@ -5,8 +5,10 @@
 #include"mystorage.h"
 
 class Group : public Prototype{
+
+    MyStorage* group_store = nullptr;
+
 public:
-    MyStorage* group_store;
 
     Group(){
         group_store = new MyStorage;
@@ -19,6 +21,17 @@ public:
 
     void push(Prototype* obj){
         group_store->add(obj);
+    }
+
+    bool isEmpty(){
+        return group_store->isEmpty();
+    }
+
+    bool isCordBelong(const QPoint& p) override{
+        for(group_store->first();!group_store->eol();group_store->next()){
+            if(group_store->getObject()->isCordBelong(p))return true;
+        }
+        return false;
     }
 
     void SetSelect() override {
