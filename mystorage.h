@@ -12,7 +12,7 @@ class Node{
     Node():next(nullptr),prototype(nullptr){}
 
     ~Node(){
-        if (!prototype) delete prototype;
+        if (prototype) delete prototype;
     }
 
     friend class MyStorage;

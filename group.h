@@ -15,7 +15,7 @@ public:
     }
 
     ~Group() {
-        group_store->deleteCircles();
+        delete group_store;
     }
 
     void updateSize() {
@@ -48,9 +48,6 @@ public:
     }
 
     void SetSelect(){
-        // for(group_store->first();!group_store->eol();group_store->next()){
-        //     group_store->getObject()->SetSelect();
-        // }
         isSelect = true;
         update();
     }
@@ -89,7 +86,6 @@ public:
     }
 
     void paintEvent(QPaintEvent *) override {
-        // Рисуем только если группа выделена
         if (isSelect_()) {
             QPainter painter(this);
             painter.setRenderHint(QPainter::Antialiasing);
@@ -100,10 +96,7 @@ public:
             SelectPen.setWidth(3);
 
             painter.setPen(SelectPen);
-            painter.setBrush(Qt::NoBrush); // Обязательно прозрачная заливка, иначе закроет фигуры внутри
-
-            // Рисуем рамку по размеру виджета
-            // Используем width() и height(), так как они точно соответствуют setGeometry
+            painter.setBrush(Qt::NoBrush);
             painter.drawRect(0, 0, width(), height());
         }
     }
