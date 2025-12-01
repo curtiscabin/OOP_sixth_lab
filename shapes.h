@@ -2,21 +2,16 @@
 #define SHAPES_H
 
 #pragma once
-#include<QPoint>
-#include<QWidget>
+
 #include<QDebug>
 #include<QString>
 #include<QPainter>
 #include<math.h>
 #include<QPushButton>
+#include"prototype.h"
 
-class Prototype : public QWidget {
-    Q_OBJECT
 
-public:
-    Prototype(QWidget *parent = nullptr) : QWidget(parent) {}
 
-};
 
 class Shape : public Prototype {
     Q_OBJECT
@@ -41,11 +36,7 @@ public:
         update();
     }
 
-    bool isCordBelong(const QPoint& p){
-        return this->geometry().contains(p);
-    }
-
-    void SetSelect(){
+    void SetSelect() override {
         isSelect = true;
         if(!edit)
         {
@@ -61,22 +52,22 @@ public:
         update();
     }
 
-    void ClearSelect(){
+    void ClearSelect() override {
         isSelect = false;
         delete edit;
         edit = nullptr;
         update();
     }
 
-    bool isSelect_(){
+    bool isSelect_() override {
         return isSelect;
     }
 
-    void PaintShape(){
+    void PaintShape() override {
         show();
     }
 
-    bool MoveShape(const QPoint&delta){
+    bool MoveShape(const QPoint&delta) override {
         int nx = x() + delta.x();
         int ny = y() + delta.y();
 
@@ -87,12 +78,12 @@ public:
         return true;
     }
 
-    void EditColor(const QString &c) {
+    void EditColor(const QString &c) override {
         color = c;
         update();
     }
 
-    void CreatSize(const QPoint& b, const QPoint& e){
+    void CreatSize(const QPoint& b, const QPoint& e) {
         QRect parentRect = this->parentWidget()->rect();
 
         int ex = e.x();
@@ -127,7 +118,7 @@ public:
         update();
     }
 
-    void ResizeThat(const QPoint &delta) {
+    void ResizeThat(const QPoint &delta) override {
         int nw = sizeX + delta.x();
         int nh = sizeY + delta.y();
 

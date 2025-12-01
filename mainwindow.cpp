@@ -93,7 +93,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
             for(store->first();!store->eol();store->next()){
                 if(store->getObject()->isSelect_()) {
                     if(!store->getObject()->MoveShape(delta)){
-                        break;
+                        return;
                     }
                 }
             }

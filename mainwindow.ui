@@ -31,8 +31,8 @@
      <rect>
       <x>40</x>
       <y>20</y>
-      <width>511</width>
-      <height>52</height>
+      <width>682</width>
+      <height>78</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -76,17 +76,17 @@
      </item>
      <item>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QRadioButton" name="radioRed">
+       <item row="1" column="3">
+        <widget class="QRadioButton" name="radioOrange">
          <property name="text">
-          <string>Красный</string>
+          <string>Оранжевый</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QRadioButton" name="radioYellow">
+       <item row="1" column="2">
+        <widget class="QRadioButton" name="radioGreen">
          <property name="text">
-          <string>Желтый</string>
+          <string>Зеленый</string>
          </property>
         </widget>
        </item>
@@ -104,6 +104,20 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="1">
+        <widget class="QRadioButton" name="radioYellow">
+         <property name="text">
+          <string>Желтый</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QRadioButton" name="radioRed">
+         <property name="text">
+          <string>Красный</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0">
         <widget class="QRadioButton" name="radioBlue">
          <property name="text">
@@ -118,17 +132,31 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
-        <widget class="QRadioButton" name="radioGreen">
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QPushButton" name="pushButton_group">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
          <property name="text">
-          <string>Зеленый</string>
+          <string>Сгруппировать</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="3">
-        <widget class="QRadioButton" name="radioOrange">
+       <item>
+        <widget class="QPushButton" name="pushButton_ungroup">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
          <property name="text">
-          <string>Оранжевый</string>
+          <string>Разгруппировать</string>
          </property>
         </widget>
        </item>
