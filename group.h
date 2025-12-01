@@ -5,45 +5,60 @@
 #include"mystorage.h"
 
 class Group : public Prototype{
-
+Q_OBJECT
     MyStorage* group_store = nullptr;
 
 public:
-
-    Group(){
+    Group(QWidget* parent = nullptr) : Prototype(parent) {
         group_store = new MyStorage;
     }
 
-    ~Group(){
+    ~Group() {
         group_store->deleteCircles();
+    }
+
+    void updateSize() {
+
+        int minX = 100000, minY = 100000;
+        int maxX = -100000, maxY = -100000;
+
+        for (group_store->first(); !group_store->eol(); group_store->next()) {
+            QRect r = group_store->getObject()->geometry();
+
+            if (r.left() < minX) minX = r.left();
+            if (r.top() < minY) minY = r.top();
+            if (r.right() > maxX) maxX = r.right();
+            if (r.bottom() > maxY) maxY = r.bottom();
+        }
+
+        setGeometry(minX, minY, maxX - minX, maxY - minY);
     }
 
 
     void push(Prototype* obj){
         group_store->add(obj);
+        updateSize();
+        show();
     }
 
     bool isEmpty(){
         return group_store->isEmpty();
     }
 
-    bool isCordBelong(const QPoint& p) override{
-        for(group_store->first();!group_store->eol();group_store->next()){
-            if(group_store->getObject()->isCordBelong(p))return true;
-        }
-        return false;
-    }
-
-    void SetSelect() override {
+    void SetSelect(){
         for(group_store->first();!group_store->eol();group_store->next()){
             group_store->getObject()->SetSelect();
         }
+        isSelect = true;
+        update();
     }
 
     void ClearSelect() override {
         for(group_store->first();!group_store->eol();group_store->next()){
             group_store->getObject()->ClearSelect();
         }
+        isSelect = false;
+        update();
     }
 
     bool isSelect_() override {
@@ -53,16 +68,11 @@ public:
         return false;
     }
 
-    void PaintShape() override{
-        for(group_store->first();!group_store->eol();group_store->next()){
-            group_store->getObject()->PaintShape();
-        }
-    }
-
     bool MoveShape(const QPoint&delta) override {
         for(group_store->first();!group_store->eol();group_store->next()){
             if(!group_store->getObject()->MoveShape(delta))return false;
         }
+        updateSize();
         return true;
     }
 
@@ -76,7 +86,29 @@ public:
         for(group_store->first();!group_store->eol();group_store->next()){
             group_store->getObject()->ResizeThat(delta);
         }
+        updateSize();
     }
+
+    void paintEvent(QPaintEvent *) override {
+        // Рисуем только если группа выделена
+        if (isSelect_()) {
+            QPainter painter(this);
+            painter.setRenderHint(QPainter::Antialiasing);
+
+            QPen SelectPen;
+            SelectPen.setDashPattern({4, 4});
+            SelectPen.setColor("cyan");
+            SelectPen.setWidth(3);
+
+            painter.setPen(SelectPen);
+            painter.setBrush(Qt::NoBrush); // Обязательно прозрачная заливка, иначе закроет фигуры внутри
+
+            // Рисуем рамку по размеру виджета
+            // Используем width() и height(), так как они точно соответствуют setGeometry
+            painter.drawRect(0, 0, width(), height());
+        }
+    }
+
 };
 
 #endif // GROUP_H

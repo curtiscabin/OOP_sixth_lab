@@ -199,15 +199,20 @@ void MainWindow::onShapeEditPressed(Shape *sh)
 
 void MainWindow::on_pushButton_group_clicked()
 {
-    group = new Group;
+    group = new Group(this);
 
-    for(store->first();!store->eol();store->next()){
-        if(store->getObject()->isSelect_()){
+    store->first();
+    while(!store->eol()) {
+        if(store->getObject()->isSelect_()) {
             dynamic_cast<Group*>(group)->push(store->exclude(store->getObject()));
+            store->first();
+        } else {
+            store->next();
         }
     }
 
     if(!dynamic_cast<Group*>(group)->isEmpty())
         store->add(group);
+    else delete group;
 }
 

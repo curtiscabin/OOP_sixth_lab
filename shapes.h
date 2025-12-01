@@ -5,7 +5,6 @@
 
 #include<QDebug>
 #include<QString>
-#include<QPainter>
 #include<math.h>
 #include<QPushButton>
 #include"prototype.h"
@@ -16,9 +15,6 @@
 class Shape : public Prototype {
     Q_OBJECT
 protected:
-    int sizeX;
-    int sizeY;
-    bool isSelect = false;
     QString color = "white";
     QPushButton *edit = nullptr;
 
@@ -36,9 +32,7 @@ public:
         update();
     }
 
-    bool isCordBelong(const QPoint& p) override {
-        return this->geometry().contains(p);
-    }
+
 
     void SetSelect() override {
         isSelect = true;
@@ -67,7 +61,7 @@ public:
         return isSelect;
     }
 
-    void PaintShape() override {
+    void PaintShape(){
         show();
     }
 
