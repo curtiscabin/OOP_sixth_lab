@@ -30,9 +30,12 @@ public:
             if (r.top() < minY) minY = r.top();
             if (r.right() > maxX) maxX = r.right();
             if (r.bottom() > maxY) maxY = r.bottom();
+
+            sizeX = maxX - minX;
+            sizeY = maxY - minY;
         }
 
-        setGeometry(minX, minY, maxX - minX, maxY - minY);
+        setGeometry(minX, minY, sizeX, sizeY);
     }
 
 
@@ -65,10 +68,18 @@ public:
     }
 
     bool MoveShape(const QPoint&delta) override {
+        int nx = x() + delta.x();
+        int ny = y() + delta.y();
+
+        QRect rectMove(nx,ny, sizeX,sizeY);
+        if(!parentWidget()->rect().contains(rectMove))return false;
+
+        move(nx,ny);
+
         for(group_store->first();!group_store->eol();group_store->next()){
             if(!group_store->getObject()->MoveShape(delta))return false;
         }
-        updateSize();
+        // updateSize();
         return true;
     }
 
