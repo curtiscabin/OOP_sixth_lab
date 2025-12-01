@@ -26,6 +26,7 @@ public:
     Shape(const QPoint& b, const QPoint& e, QWidget* parent = nullptr) : Prototype(parent) {
         sizeX = abs(e.x() - b.x());
         sizeY = abs(e.y()- b.y());
+        SetSelect();
     }
 
     ~Shape(){

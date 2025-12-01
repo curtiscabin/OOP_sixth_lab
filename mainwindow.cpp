@@ -78,7 +78,6 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
         if (!isSelecting ){
             if(!s){
                 s = GiveMe();
-                s->SetSelect();
                 s->EditColor(color);
                 store->add(s);
             }

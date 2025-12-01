@@ -11,6 +11,7 @@ Q_OBJECT
 public:
     Group(QWidget* parent = nullptr) : Prototype(parent) {
         group_store = new MyStorage;
+        SetSelect();
     }
 
     ~Group() {
@@ -37,6 +38,7 @@ public:
 
     void push(Prototype* obj){
         group_store->add(obj);
+        obj->ClearSelect();
         updateSize();
         show();
     }
@@ -46,9 +48,9 @@ public:
     }
 
     void SetSelect(){
-        for(group_store->first();!group_store->eol();group_store->next()){
-            group_store->getObject()->SetSelect();
-        }
+        // for(group_store->first();!group_store->eol();group_store->next()){
+        //     group_store->getObject()->SetSelect();
+        // }
         isSelect = true;
         update();
     }
@@ -62,10 +64,7 @@ public:
     }
 
     bool isSelect_() override {
-        for(group_store->first();!group_store->eol();group_store->next()){
-            if(group_store->getObject()->isSelect_())return true;
-        }
-        return false;
+        return isSelect;
     }
 
     bool MoveShape(const QPoint&delta) override {
