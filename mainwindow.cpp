@@ -181,13 +181,13 @@ Shape* MainWindow::GiveMe(){
         break;
     }
 
-    connect(ns, &Shape::editPressed,this, &MainWindow::onShapeEditPressed);
+    connect(ns, &Prototype::editPressed,this, &MainWindow::onPrototypeEditPressed);
 
     return ns;
 
 }
 
-void MainWindow::onShapeEditPressed(Shape *sh)
+void MainWindow::onPrototypeEditPressed(Prototype *sh)
 {
     if(sh->isSelect_()){
         groupResizing = true;
@@ -199,6 +199,8 @@ void MainWindow::onShapeEditPressed(Shape *sh)
 void MainWindow::on_pushButton_group_clicked()
 {
     group = new Group(this);
+
+    connect(group, &Prototype::editPressed, this, &MainWindow::onPrototypeEditPressed);
 
     store->first();
     while(!store->eol()) {

@@ -16,10 +16,6 @@ class Shape : public Prototype {
     Q_OBJECT
 protected:
     QString color = "white";
-    QPushButton *edit = nullptr;
-
-signals:
-    void editPressed(Shape *self);
 
 
 public:
@@ -37,24 +33,13 @@ public:
 
     void SetSelect() override {
         isSelect = true;
-        if(!edit)
-        {
-            edit = new QPushButton(this);
-            edit->setFixedSize(20,20);
-            edit->move(sizeX - 20, sizeY - 20);
-            edit->show();
-        }
-
-        if (edit && this) {
-            connect(edit, &QPushButton::pressed, this, &Shape::onEditButtonPressed);
-        }
+        updateEditButton();
         update();
     }
 
     void ClearSelect() override {
         isSelect = false;
-        delete edit;
-        edit = nullptr;
+        updateEditButton();
         update();
     }
 
@@ -113,7 +98,7 @@ public:
         if(edit){
             edit->move(sizeX - 20, sizeY - 20);
         }
-
+        updateEditButton();
         update();
     }
 
@@ -136,14 +121,8 @@ public:
         if (edit) {
             edit->move(sizeX - 20, sizeY - 20);
         }
-
+        if(isSelect)updateEditButton();
         update();
-    }
-
-protected slots:
-    void onEditButtonPressed() {
-        qDebug()<<"Button is pressed";
-        emit editPressed(this);
     }
 };
 

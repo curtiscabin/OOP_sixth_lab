@@ -36,6 +36,8 @@ public:
         }
 
         setGeometry(minX, minY, sizeX, sizeY);
+
+        if(isSelect)updateEditButton();
     }
 
 
@@ -50,8 +52,9 @@ public:
         return group_store->isEmpty();
     }
 
-    void SetSelect(){
+    void SetSelect() override {
         isSelect = true;
+        updateEditButton();
         update();
     }
 
@@ -60,6 +63,7 @@ public:
             group_store->getObject()->ClearSelect();
         }
         isSelect = false;
+        updateEditButton();
         update();
     }
 
@@ -77,9 +81,8 @@ public:
         move(nx,ny);
 
         for(group_store->first();!group_store->eol();group_store->next()){
-            if(!group_store->getObject()->MoveShape(delta))return false;
+            group_store->getObject()->MoveShape(delta);
         }
-        // updateSize();
         return true;
     }
 
