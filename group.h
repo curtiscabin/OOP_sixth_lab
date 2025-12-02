@@ -48,6 +48,10 @@ public:
         show();
     }
 
+    Prototype* exclude_first(){
+        return group_store->exclude_first();
+    }
+
     bool isEmpty(){
         return group_store->isEmpty();
     }

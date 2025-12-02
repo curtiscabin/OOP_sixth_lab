@@ -153,6 +153,13 @@ public:
         }
     }
 
+    Prototype* exclude_first(){
+        Prototype*toExclude = head->prototype;
+        head->prototype = nullptr;
+        delete head;
+        head=head->next;
+        return toExclude;
+    }
 
 
 

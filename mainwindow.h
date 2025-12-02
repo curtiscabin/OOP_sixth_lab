@@ -26,6 +26,8 @@ public:
 private slots:
     void on_pushButton_group_clicked();
 
+    void on_pushButton_ungroup_clicked();
+
 private:
     Ui::MainWindow *ui;
     void mousePressEvent(QMouseEvent *event) override;
@@ -46,7 +48,7 @@ private:
     bool groupResizing = false;
     QPoint lastResizePos;
     QRubberBand* rubBand = nullptr;
-    Prototype* group = nullptr;
+    Group* group = nullptr;
 
 };
 #endif // MAINWINDOW_H

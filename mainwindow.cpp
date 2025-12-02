@@ -205,15 +205,32 @@ void MainWindow::on_pushButton_group_clicked()
     store->first();
     while(!store->eol()) {
         if(store->getObject()->isSelect_()) {
-            dynamic_cast<Group*>(group)->push(store->exclude(store->getObject()));
+            group->push(store->exclude(store->getObject()));
             store->first();
         } else {
             store->next();
         }
     }
 
-    if(!dynamic_cast<Group*>(group)->isEmpty())
+    if(!group->isEmpty())
         store->add(group);
     else delete group;
+}
+
+
+void MainWindow::on_pushButton_ungroup_clicked()
+{
+    for(store->first();!store->eol();){
+        Prototype*group_maybe = store->getObject();
+        if(group_maybe->isSelect_() && dynamic_cast<Group*>(group_maybe)){
+            Group*ungroup = dynamic_cast<Group*>(store->exclude(group_maybe));
+            while(!ungroup->isEmpty()){
+                store->add(ungroup->exclude_first());
+            }
+            delete ungroup;
+        }
+
+        else store->next();
+    }
 }
 
