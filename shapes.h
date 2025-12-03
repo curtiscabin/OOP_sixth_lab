@@ -51,7 +51,7 @@ public:
         show();
     }
 
-    bool MoveShape(const QPoint&delta) override {
+    bool MoveProto(const QPoint&delta) override {
         int nx = x() + delta.x();
         int ny = y() + delta.y();
 

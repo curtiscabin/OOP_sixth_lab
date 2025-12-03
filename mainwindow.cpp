@@ -26,7 +26,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::mousePressEvent(QMouseEvent *event){
+void MainWindow::mousePressEvent(QMouseEvent *event){//one click
     b = event->pos();
     if (event->button() == Qt::LeftButton)
     {
@@ -61,10 +61,10 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
     }
 }
 
-void MainWindow::mouseMoveEvent(QMouseEvent *event){
+void MainWindow::mouseMoveEvent(QMouseEvent *event){//moveclick
     e = event->pos();
-    if(event->buttons() & Qt::LeftButton){
-        if (groupResizing) {
+    if(event->buttons() & Qt::LeftButton){//left click
+        if (isrResizing) {//resizing
             delta = e - lastResizePos;
             lastResizePos = e;
 
@@ -75,7 +75,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
             }
             return;
         }
-        if (!isSelecting ){
+        if (!isSelecting ){//creating
             if(!s){
                 s = GiveMe();
                 s->EditColor(color);
@@ -85,28 +85,40 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
             s->PaintShape();
         }
 
-        else{
+        else{//moving
+            isMoving = true;
             delta = e - postpoint;
             postpoint = e;
+
             for(store->first();!store->eol();store->next()){
                 if(store->getObject()->isSelect_()) {
-                    if(!store->getObject()->MoveShape(delta)){
-                        return;
-                    }
+                    com = new MoveCommand(delta);
+                    com->execute(store->getObject());
+                    delete com;
+                    com = nullptr;
                 }
             }
         }
     }
-    else if (event->buttons() & Qt::RightButton){
+    else if (event->buttons() & Qt::RightButton){//right click -> rubberBand
         if(rubBand)rubBand->setGeometry(QRect(b,e).normalized());
     }
 }
 
-void MainWindow::mouseReleaseEvent(QMouseEvent *){
-    s = nullptr;
-    if (groupResizing) {
-        groupResizing = false;
+void MainWindow::mouseReleaseEvent(QMouseEvent *){//unclick
+    if(s) s = nullptr;
+    if (isrResizing) {//stop resizing
+        isrResizing = false;
         releaseMouse();
+    }
+    if(isMoving){
+        isMoving = false;
+        delta = e - b;
+        for(store->first();!store->eol();store->next()){
+            if(store->getObject()->isSelect_()){
+                coms.push(new MoveCommand(delta,store->getObject()));
+            }
+        }
     }
     if(rubBand && rubBand->isVisible()){
         for(store->first();!store->eol();store->next()){
@@ -118,17 +130,27 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *){
     }
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event){
+void MainWindow::keyPressEvent(QKeyEvent *event){//key contoller
     int key = event->key();
 
     if (key == Qt::Key_Delete){
         qDebug()<<"Key is Delete";
         store->deleteCircles();
+        while(!coms.isEmpty())coms.pop();
+    }
+    else if(key == Qt::Key_Z){
+        if(!coms.isEmpty())
+        {
+            com = coms.top();
+            coms.pop();
+            com->unexecute();
+            delete com;
+        }
     }
 
 }
 
-void MainWindow::EditColorByRadioBtton(){
+void MainWindow::EditColorByRadioBtton(){ //color editor
 if (ui->radioBlue->isChecked()){
         color = "blue";
     }
@@ -162,7 +184,7 @@ if (ui->radioBlue->isChecked()){
 
 }
 
-Shape* MainWindow::GiveMe(){
+Shape* MainWindow::GiveMe(){// like fabric
     int key = ui->comboBox->currentIndex();
     Shape *ns;
     switch (key)
@@ -187,50 +209,57 @@ Shape* MainWindow::GiveMe(){
 
 }
 
-void MainWindow::onPrototypeEditPressed(Prototype *sh)
+void MainWindow::onPrototypeEditPressed(Prototype *sh)//editBtn is pressed
 {
     if(sh->isSelect_()){
-        groupResizing = true;
+        isrResizing = true;
         lastResizePos = mapFromGlobal(QCursor::pos());
         grabMouse();
     }
 }
 
-void MainWindow::on_pushButton_group_clicked()
+void MainWindow::on_pushButton_group_clicked()//grouping
 {
     group = new Group(this);
 
     connect(group, &Prototype::editPressed, this, &MainWindow::onPrototypeEditPressed);
 
-    store->first();
-    while(!store->eol()) {
-        if(store->getObject()->isSelect_()) {
-            group->push(store->exclude(store->getObject()));
-            store->first();
-        } else {
-            store->next();
-        }
-    }
+    // store->first();
+    // while(!store->eol()) {
+    //     if(store->getObject()->isSelect_()) {
+    //         group->push(store->exclude(store->getObject()));
+    //         store->first();
+    //     } else {
+    //         store->next();
+    //     }
+    // }
 
-    if(!group->isEmpty())
-        store->add(group);
-    else delete group;
+    // if(!group->isEmpty())
+    //     store->add(group);
+    // else delete group;
+
+    com = new GroupCommand(store);
+    com->execute(group);
+    coms.push(com);
 }
 
 
-void MainWindow::on_pushButton_ungroup_clicked()
+void MainWindow::on_pushButton_ungroup_clicked()//ungrouping
 {
-    for(store->first();!store->eol();){
-        Prototype*group_maybe = store->getObject();
-        if(group_maybe->isSelect_() && dynamic_cast<Group*>(group_maybe)){
-            Group*ungroup = dynamic_cast<Group*>(store->exclude(group_maybe));
-            while(!ungroup->isEmpty()){
-                store->add(ungroup->exclude_first());
-            }
-            delete ungroup;
-        }
+    // for(store->first();!store->eol();){
+    //     Prototype*group_maybe = store->getObject();
+    //     if(group_maybe->isSelect_() && dynamic_cast<Group*>(group_maybe)){
+    //         Group*ungroup = dynamic_cast<Group*>(store->exclude(group_maybe));
+    //         while(!ungroup->isEmpty()){
+    //             store->add(ungroup->exclude_first());
+    //         }
+    //         delete ungroup;
+    //     }
 
-        else store->next();
-    }
+    //     else store->next();
+    // }
+
+    com = new GroupCommand(store);
+    com->unexecute();
 }
 
