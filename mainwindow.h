@@ -3,13 +3,11 @@
 
 #include <QMainWindow>
 #include<QMouseEvent>
-#include<QRubberBand>
 #include"mystorage.h"
 #include"shapes.h"
 #include"prototype.h"
 #include"group.h"
-#include"command.h"
-#include<QStack>
+#include<QRubberBand>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -47,14 +45,10 @@ private:
     QString color;
     Shape *s = nullptr;
     bool isSelecting = false;
-    bool isrResizing = false;
+    bool groupResizing = false;
     QPoint lastResizePos;
     QRubberBand* rubBand = nullptr;
     Group* group = nullptr;
-    Command*com = nullptr;
-    QStack<Command*> coms;
-    QStack<Command*> toRemember;
-    bool isMoving = false;
 
 };
 #endif // MAINWINDOW_H

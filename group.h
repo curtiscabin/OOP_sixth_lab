@@ -75,7 +75,7 @@ public:
         return isSelect;
     }
 
-    bool MoveProto(const QPoint&delta) override {
+    bool MoveShape(const QPoint&delta) override {
         int nx = x() + delta.x();
         int ny = y() + delta.y();
 
@@ -85,7 +85,7 @@ public:
         move(nx,ny);
 
         for(group_store->first();!group_store->eol();group_store->next()){
-            group_store->getObject()->MoveProto(delta);
+            group_store->getObject()->MoveShape(delta);
         }
         return true;
     }

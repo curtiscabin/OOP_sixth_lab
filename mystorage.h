@@ -1,6 +1,7 @@
 #ifndef MYSTORAGE_H
 #define MYSTORAGE_H
 #pragma once
+#endif // MYSTORAGE_H
 #include "Prototype.h"
 
 class Node{
@@ -163,5 +164,3 @@ public:
 
 
 };
-
-#endif // MYSTORAGE_H

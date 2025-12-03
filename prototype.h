@@ -32,7 +32,7 @@ public:
 
     virtual bool isSelect_() = 0;
 
-    virtual bool MoveProto(const QPoint&delta) = 0;
+    virtual bool MoveShape(const QPoint&delta) = 0;
 
     virtual void EditColor(const QString &c) = 0;
 
