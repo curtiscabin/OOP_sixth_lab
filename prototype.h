@@ -5,6 +5,7 @@
 #include<QWidget>
 #include<QPainter>
 #include<QPushButton>
+#include<QFile>
 
 class Prototype : public QWidget {
     Q_OBJECT
@@ -63,6 +64,10 @@ public:
             }
         }
     }
+
+    virtual void Save(QString filename) = 0;
+
+    virtual void Load(QString filename) = 0;
 
 signals:
     void editPressed(Prototype *self);

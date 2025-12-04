@@ -1,8 +1,10 @@
 #ifndef MYSTORAGE_H
 #define MYSTORAGE_H
 #pragma once
-#endif // MYSTORAGE_H
+#include<QString>
 #include "Prototype.h"
+#include "shapes.h"
+#include "group.h"
 
 class Node{
 
@@ -162,6 +164,61 @@ public:
         return toExclude;
     }
 
+    Prototype*createProto(char s){
+        switch (s) {
+            case "C" :
+                return new Circle();
+            case "R" :
+                return new Rect();
+            case "T" :
+                return new Triangle();
+            case "S":
+                return new Section();
+            case "G" :
+                return new Group();
+            default :
+                qDebug()<<"Error in createProto";
+        }
+    }
 
+    void SaveSelf(QString filename){
+        QFile file(filename);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            QTextStream out(&file);
+            out << get_size();
+            for(first();!eol();next()){
+                getObject()->Save(filename);
+            }
+        file.close();
+        }
+    }
+
+    void LoadFrom(QString filename){
+        Prototype*obj;
+        QFile file(filename);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream in(&file);
+            QString line = in.readLine();
+            bool ok;
+            int size = line.toInt(&ok);
+            if (ok) {
+                qDebug() << "Size in file:" << size;
+                for(int i = 0 ; i<size; i++){
+                    QString symbol = in.readLine();
+                    qDebug()<<"Symbol is "<<symbol;
+                    if(!symbol.isEmpty()){
+                        obj = createProto(symbol);
+                        obj->Load(filename);
+                        add(obj);
+                    }
+                }
+            } else {
+                qDebug() << "Error of reading file";
+            }
+            file.close();
+        }
+    }
 
 };
+
+#endif // MYSTORAGE_H

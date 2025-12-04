@@ -119,6 +119,14 @@ public:
         }
     }
 
+    void Save(QString filename) override {
+
+    }
+
+    void Load(QString filename) override {
+
+    }
+
 };
 
 #endif // GROUP_H

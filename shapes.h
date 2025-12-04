@@ -124,6 +124,14 @@ public:
         if(isSelect)updateEditButton();
         update();
     }
+
+    void Save(QString filename) override {
+
+    }
+
+    void Load(QString filename) override {
+
+    }
 };
 
 
