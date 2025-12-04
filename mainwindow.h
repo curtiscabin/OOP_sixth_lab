@@ -1,9 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
 #include<QMouseEvent>
-#include"mystorage.h"
+// #include"mystorage.h"
 #include"shapes.h"
 #include"prototype.h"
 #include"group.h"

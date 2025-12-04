@@ -4,7 +4,7 @@
 #include<QString>
 #include "Prototype.h"
 #include "shapes.h"
-#include "group.h"
+// #include "group.h"
 
 class Node{
 
@@ -164,20 +164,23 @@ public:
         return toExclude;
     }
 
-    Prototype*createProto(char s){
-        switch (s) {
-            case "C" :
-                return new Circle();
-            case "R" :
-                return new Rect();
-            case "T" :
-                return new Triangle();
-            case "S":
-                return new Section();
-            case "G" :
-                return new Group();
-            default :
-                qDebug()<<"Error in createProto";
+    Prototype*createProto(QTextStream &in, QWidget* parent = nullptr){
+        QString sym = in.readLine();
+        if(sym == "C"){
+            qDebug()<<"return Circle";
+            return new Circle(parent);
+        }
+        else if(sym == "R"){
+            qDebug()<<"return Circle";
+            return new Rect(parent);
+        }
+        else if(sym == "T"){
+            qDebug()<<"return Circle";
+            return new Triangle(parent);
+        }
+        else if(sym == "S"){
+            qDebug()<<"return Circle";
+            return new Section(parent);
         }
     }
 
@@ -185,15 +188,15 @@ public:
         QFile file(filename);
         if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
             QTextStream out(&file);
-            out << get_size();
+            out << get_size()<<'\n';
             for(first();!eol();next()){
-                getObject()->Save(filename);
+                getObject()->Save(out);
             }
         file.close();
         }
     }
 
-    void LoadFrom(QString filename){
+    void LoadFrom(QString filename, QWidget*parent){
         Prototype*obj;
         QFile file(filename);
         if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -204,13 +207,14 @@ public:
             if (ok) {
                 qDebug() << "Size in file:" << size;
                 for(int i = 0 ; i<size; i++){
-                    QString symbol = in.readLine();
-                    qDebug()<<"Symbol is "<<symbol;
-                    if(!symbol.isEmpty()){
-                        obj = createProto(symbol);
-                        obj->Load(filename);
+                    // QString symbol = in.readLine();
+                    // qDebug()<<"Symbol is "<<symbol;
+                    // if(!symbol.isEmpty()){
+                        obj = createProto(in, parent);
+                        obj->Load(in);
+                        obj->show();
                         add(obj);
-                    }
+                    // }
                 }
             } else {
                 qDebug() << "Error of reading file";

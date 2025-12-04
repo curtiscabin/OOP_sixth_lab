@@ -1,8 +1,9 @@
 #ifndef GROUP_H
 #define GROUP_H
-
+#pragma once
 #include"prototype.h"
 #include"mystorage.h"
+
 
 class Group : public Prototype{
 Q_OBJECT
@@ -119,12 +120,26 @@ public:
         }
     }
 
-    void Save(QString filename) override {
+    // void show() override{
+    //     for(group_store->first();!group_store->eol();group_store->next()){
+    //         group_store->getObject()->show();
+    //     }
+    // }
 
+    QString getSymbol() override{
+        return "G";
     }
 
-    void Load(QString filename) override {
+    void Save(QTextStream& out) override {
+        // for(group_store->first();!group_store->eol();group_store->next()){
+        //     group_store->getObject()->Save(out);
+        // }
+    }
 
+    void Load(QTextStream& in) override {
+        // for(group_store->first();!group_store->eol();group_store->next()){
+        //     group_store->getObject()->Load(in);
+        // }
     }
 
 };

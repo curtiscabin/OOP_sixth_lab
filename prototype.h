@@ -1,11 +1,13 @@
 #ifndef PROTOTYPE_H
 #define PROTOTYPE_H
-
+#pragma once
 #include<QPoint>
 #include<QWidget>
 #include<QPainter>
 #include<QPushButton>
 #include<QFile>
+
+
 
 class Prototype : public QWidget {
     Q_OBJECT
@@ -18,6 +20,10 @@ protected:
 public:
 
     Prototype(QWidget *parent = nullptr) : QWidget(parent), sizeX(0), sizeY(0) {}
+
+    Prototype() {
+        qDebug()<<"created Proto without parametrs";
+    }
 
     virtual ~Prototype() {
         if(edit) delete edit;
@@ -65,9 +71,11 @@ public:
         }
     }
 
-    virtual void Save(QString filename) = 0;
+    virtual void Save(QTextStream& out) = 0;
 
-    virtual void Load(QString filename) = 0;
+    virtual void Load(QTextStream& out) = 0;
+
+    virtual QString getSymbol() = 0;
 
 signals:
     void editPressed(Prototype *self);

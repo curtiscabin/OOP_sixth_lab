@@ -20,9 +20,14 @@ protected:
 
 public:
     Shape(const QPoint& b, const QPoint& e, QWidget* parent = nullptr) : Prototype(parent) {
+        qDebug()<<"created Shape with parametrs";
         sizeX = abs(e.x() - b.x());
         sizeY = abs(e.y()- b.y());
         SetSelect();
+    }
+
+
+    Shape(QWidget* parent = nullptr) : Prototype(parent){
     }
 
     ~Shape(){
@@ -125,12 +130,30 @@ public:
         update();
     }
 
-    void Save(QString filename) override {
-
+    void Save(QTextStream& out) override {
+        out<<getSymbol()<<'\n';
+        out<<x()<<'\n';
+        out<<y()<<'\n';
+        out<<sizeX<<'\n';
+        out<<sizeY<<'\n';
+        out<<color<<'\n';
     }
 
-    void Load(QString filename) override {
-
+    void Load(QTextStream& in) override {
+        int x,y;
+        QString line;
+        line = in.readLine();
+        x = line.toInt();
+        line = in.readLine();
+        y = line.toInt();
+        line = in.readLine();
+        sizeX = line.toInt();
+        line = in.readLine();
+        sizeY = line.toInt();
+        color = in.readLine();
+        move(x,y);
+        setFixedSize(sizeX,sizeY);
+        EditColor(color);
     }
 };
 
@@ -141,6 +164,8 @@ public:
     Circle(const QPoint& b, const QPoint& e, QWidget* parent) : Shape(b, e, parent){
         qDebug()<<"Created Circle";
     }
+
+    Circle(QWidget* parent = nullptr) : Shape(parent){}
 
     void paintEvent(QPaintEvent *) override {
         QPainter painter(this);
@@ -162,6 +187,9 @@ public:
         painter.drawEllipse(0,0,sizeX,sizeY);
     }
 
+    QString getSymbol() override{
+        return "C";
+    }
 };
 
 class Rect : public Shape {
@@ -171,6 +199,8 @@ public:
     {
         qDebug() << "Created Square";
     }
+
+    Rect(QWidget* parent = nullptr) : Shape(parent){}
 
     void paintEvent(QPaintEvent *) override {
         QPainter painter(this);
@@ -190,6 +220,10 @@ public:
             painter.drawRect(0, 0, sizeX, sizeY);
         }
     }
+
+    QString getSymbol() override{
+        return "R";
+    }
 };
 
 class Triangle : public Shape {
@@ -199,6 +233,8 @@ public:
     {
         qDebug() << "Created Triangle";
     }
+
+    Triangle(QWidget* parent = nullptr) : Shape(parent){}
 
     void paintEvent(QPaintEvent *) override {
         QPainter painter(this);
@@ -223,6 +259,10 @@ public:
             painter.drawRect(0, 0, sizeX, sizeY);
         }
     }
+
+    QString getSymbol() override{
+        return "T";
+    }
 };
 
 class Section : public Shape {
@@ -230,6 +270,8 @@ public:
     Section(const QPoint& b, const QPoint& e, QWidget* parent) : Shape(b, e, parent){
         qDebug()<<"Created Circle";
     }
+
+    Section(QWidget* parent = nullptr) : Shape(parent){}
 
     void paintEvent(QPaintEvent *) override {
         QPainter painter(this);
@@ -249,6 +291,9 @@ public:
         painter.drawLine(0,0,sizeX,sizeY);
     }
 
+    QString getSymbol() override{
+        return "S";
+    }
 };
 
 #endif // SHAPES_H

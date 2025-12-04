@@ -241,7 +241,11 @@ void MainWindow::on_LoadFile_triggered()
 
     if (!filename.isEmpty()) {
         qDebug() << "Выбран файл:" << filename;
-        store->LoadFrom(filename);
+        store->LoadFrom(filename, this);
+    }
+
+    for(store->first();!store->eol();store->next()){
+        connect(store->getObject(), &Prototype::editPressed,this, &MainWindow::onPrototypeEditPressed);
     }
 }
 
