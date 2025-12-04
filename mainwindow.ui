@@ -174,8 +174,44 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Меню</string>
+    </property>
+    <addaction name="LoadFile"/>
+    <addaction name="SaveFile"/>
+    <addaction name="CloseApp"/>
+   </widget>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="LoadFile">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentPageSetup"/>
+   </property>
+   <property name="text">
+    <string>Загрузить файл</string>
+   </property>
+  </action>
+  <action name="SaveFile">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentSave"/>
+   </property>
+   <property name="text">
+    <string>Сохранить</string>
+   </property>
+  </action>
+  <action name="CloseApp">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ApplicationExit"/>
+   </property>
+   <property name="text">
+    <string>Выйти</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

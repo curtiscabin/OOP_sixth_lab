@@ -1,7 +1,7 @@
 #ifndef MYSTORAGE_H
 #define MYSTORAGE_H
 #pragma once
-#endif // MYSTORAGE_H
+#include<QString>
 #include "Prototype.h"
 
 class Node{
@@ -161,7 +161,13 @@ public:
         head=head->next;
         return toExclude;
     }
+    
+    void SaveSelf(QString filename){
+        
+    }
 
-
+    void 
 
 };
+
+#endif // MYSTORAGE_H

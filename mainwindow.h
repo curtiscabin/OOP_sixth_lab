@@ -8,6 +8,7 @@
 #include"prototype.h"
 #include"group.h"
 #include<QRubberBand>
+#include <QFileDialog>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,6 +28,12 @@ private slots:
     void on_pushButton_group_clicked();
 
     void on_pushButton_ungroup_clicked();
+
+    void on_LoadFile_triggered();
+
+    void on_SaveFile_triggered();
+
+    void on_CloseApp_triggered();
 
 private:
     Ui::MainWindow *ui;

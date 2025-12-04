@@ -234,3 +234,31 @@ void MainWindow::on_pushButton_ungroup_clicked()
     }
 }
 
+
+void MainWindow::on_LoadFile_triggered()
+{
+    QString filename = QFileDialog::getOpenFileName(this, "Открыть файл", "C:\\my_projects\\qt_projects\\OOP_sixth_lab\\saves", "Текстовые файлы (*.txt);;Все файлы (*.*)");
+
+    if (!filename.isEmpty()) {
+        qDebug() << "Выбран файл:" << filename;
+        store->LoadFrom(filename);
+    }
+}
+
+
+void MainWindow::on_SaveFile_triggered()
+{
+    QString filename = QFileDialog::getSaveFileName(this, "Сохранить файл", "C:\\my_projects\\qt_projects\\OOP_sixth_lab\\saves","Текстовые файлы (*.txt);;Все файлы (*.*)");
+
+    if (!filename.isEmpty()) {
+        qDebug() << "Сохранить в:" << filename;
+        store->SaveSelf(filename);
+    }
+}
+
+
+void MainWindow::on_CloseApp_triggered()
+{
+    QApplication::quit();
+}
+
