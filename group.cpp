@@ -40,7 +40,6 @@ void Group::push(Prototype *obj){
 
 Prototype *Group::exclude_first(){
     Prototype*obj = group_store->exclude_first();
-    obj->SetSelect();
     return obj;
 }
 

@@ -98,6 +98,10 @@ Prototype *MyStorage::exclude(Prototype *obj) {
                 head = curr->next;
             }
 
+            if (current == curr) {
+                current = curr->next;
+            }
+
             if (curr == tail) {
                 tail = prev;
             }

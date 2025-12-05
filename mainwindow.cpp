@@ -184,21 +184,45 @@ void MainWindow::on_pushButton_group_clicked()
 
 void MainWindow::on_pushButton_ungroup_clicked()
 {
+    MyStorage*forUnGroup = nullptr;
     for(store->first();!store->eol();){
         Prototype*group_maybe = store->getObject();
         if(group_maybe->isSelect_() && dynamic_cast<Group*>(group_maybe)){
-            qDebug()<<"iti a Group";
-            Group*ungroup = dynamic_cast<Group*>(store->exclude(group_maybe));
+            if(!forUnGroup)forUnGroup = new MyStorage();
+            forUnGroup->add(store->exclude(group_maybe));
+        }
+        else store->next();
+    }
+
+    if(forUnGroup){
+        while(!forUnGroup->isEmpty()){
+            Group*ungroup = dynamic_cast<Group*>(forUnGroup->exclude_first());
             while(!ungroup->isEmpty()){
                 Prototype* obj= ungroup->exclude_first();
                 connect(obj, &Prototype::editPressed,this, &MainWindow::onPrototypeEditPressed);
                 store->add(obj);
+                obj->SetSelect();
             }
             delete ungroup;
         }
-
-        else store->next();
     }
+
+    // for(store->first();!store->eol();){
+    //     Prototype*group_maybe = store->getObject();
+    //     if(group_maybe->isSelect_() && dynamic_cast<Group*>(group_maybe)){
+    //         qDebug()<<"iti a Group";
+    //         Group*ungroup = dynamic_cast<Group*>(store->exclude(group_maybe));
+    //         while(!ungroup->isEmpty()){
+    //             Prototype* obj= ungroup->exclude_first();
+    //             connect(obj, &Prototype::editPressed,this, &MainWindow::onPrototypeEditPressed);
+    //             store->add(obj);
+    //             obj->SetSelect();
+    //         }
+    //         delete ungroup;
+    //     }
+
+    //     else store->next();
+    // }
 }
 
 
