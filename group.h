@@ -4,143 +4,47 @@
 #include"prototype.h"
 #include"mystorage.h"
 
+class MyStorage;
 
 class Group : public Prototype{
 Q_OBJECT
     MyStorage* group_store = nullptr;
 
 public:
-    Group(QWidget* parent = nullptr) : Prototype(parent) {
-        group_store = new MyStorage;
-        SetSelect();
-    }
+    Group(QWidget* parent = nullptr);
 
-    ~Group() {
-        delete group_store;
-    }
+    ~Group();
 
-    void updateSize() {
-
-        int minX = 100000, minY = 100000;
-        int maxX = -100000, maxY = -100000;
-
-        for (group_store->first(); !group_store->eol(); group_store->next()) {
-            QRect r = group_store->getObject()->geometry();
-
-            if (r.left() < minX) minX = r.left();
-            if (r.top() < minY) minY = r.top();
-            if (r.right() > maxX) maxX = r.right();
-            if (r.bottom() > maxY) maxY = r.bottom();
-
-            sizeX = maxX - minX;
-            sizeY = maxY - minY;
-        }
-
-        setGeometry(minX, minY, sizeX, sizeY);
-
-        if(isSelect)updateEditButton();
-    }
+    void updateSize();
 
 
-    void push(Prototype* obj){
-        group_store->add(obj);
-        obj->ClearSelect();
-        updateSize();
-        show();
-    }
+    void push(Prototype* obj);
 
-    Prototype* exclude_first(){
-        return group_store->exclude_first();
-    }
+    Prototype *exclude_first();
 
-    bool isEmpty(){
-        return group_store->isEmpty();
-    }
+    bool isEmpty();
 
-    void SetSelect() override {
-        isSelect = true;
-        updateEditButton();
-        update();
-    }
+    void SetSelect() override;
 
-    void ClearSelect() override {
-        for(group_store->first();!group_store->eol();group_store->next()){
-            group_store->getObject()->ClearSelect();
-        }
-        isSelect = false;
-        updateEditButton();
-        update();
-    }
+    void ClearSelect() override;
 
     bool isSelect_() override {
         return isSelect;
     }
 
-    bool MoveShape(const QPoint&delta) override {
-        int nx = x() + delta.x();
-        int ny = y() + delta.y();
+    bool MoveShape(const QPoint&delta) override;
 
-        QRect rectMove(nx,ny, sizeX,sizeY);
-        if(!parentWidget()->rect().contains(rectMove))return false;
+    void EditColor(const QColor &c) override;
 
-        move(nx,ny);
+    void ResizeThat(const QPoint &delta) override;
 
-        for(group_store->first();!group_store->eol();group_store->next()){
-            group_store->getObject()->MoveShape(delta);
-        }
-        return true;
-    }
+    void paintEvent(QPaintEvent *) override;
 
-    void EditColor(const QString &c) override {
-        for(group_store->first();!group_store->eol();group_store->next()){
-            group_store->getObject()->EditColor(c);
-        }
-    }
+    QString getSymbol() override;
 
-    void ResizeThat(const QPoint &delta) override {
-        for(group_store->first();!group_store->eol();group_store->next()){
-            group_store->getObject()->ResizeThat(delta);
-        }
-        updateSize();
-    }
+    void Save(QTextStream& out) override;
 
-    void paintEvent(QPaintEvent *) override {
-        if (isSelect_()) {
-            QPainter painter(this);
-            painter.setRenderHint(QPainter::Antialiasing);
-
-            QPen SelectPen;
-            SelectPen.setDashPattern({4, 4});
-            SelectPen.setColor("cyan");
-            SelectPen.setWidth(3);
-
-            painter.setPen(SelectPen);
-            painter.setBrush(Qt::NoBrush);
-            painter.drawRect(0, 0, width(), height());
-        }
-    }
-
-    // void show() override{
-    //     for(group_store->first();!group_store->eol();group_store->next()){
-    //         group_store->getObject()->show();
-    //     }
-    // }
-
-    QString getSymbol() override{
-        return "G";
-    }
-
-    void Save(QTextStream& out) override {
-        // for(group_store->first();!group_store->eol();group_store->next()){
-        //     group_store->getObject()->Save(out);
-        // }
-    }
-
-    void Load(QTextStream& in) override {
-        // for(group_store->first();!group_store->eol();group_store->next()){
-        //     group_store->getObject()->Load(in);
-        // }
-    }
+    void Load(QTextStream& in) override;
 
 };
 

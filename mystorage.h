@@ -3,24 +3,7 @@
 #pragma once
 #include<QString>
 #include "Prototype.h"
-#include "shapes.h"
-// #include "group.h"
-
-class Node{
-
-    Node *next;
-    Prototype *prototype;
-
-    Node():next(nullptr),prototype(nullptr){}
-
-    ~Node(){
-        if (prototype) delete prototype;
-    }
-
-    friend class MyStorage;
-
-
-};
+#include"node.h"
 
 class MyStorage {
     Node *head;
@@ -28,190 +11,39 @@ class MyStorage {
     Node *current;
 
 public:
-    MyStorage() : head(nullptr),tail(nullptr),current(nullptr) {}
+    MyStorage();
 
-    void clear(){
-        while (head){
-            current = head;
-            head = current->next;
-            delete current;
+    ~MyStorage();
 
-        }
-        current = nullptr;
-        tail = nullptr;
-    }
+    void clear();
 
-    ~MyStorage(){
-        this->clear();
-    }
+    bool isEmpty();
 
-    bool isEmpty(){
-        return !head;
-    }
+    void add(Prototype *shap);
 
-    void add(Prototype *shap){
-        qDebug()<<"enter to add";
-        Node* node = new Node;
-        node->prototype = shap;
-        node->next = head;
-        head = node;
-        current = node;
-        if (!tail) tail = node;
+    void first();
 
-    }
+    void next();
 
-    void first(){
-        current = head;
-    }
+    bool eol();
 
-    void next(){
-        if (current) current = current->next ;
-    }
+    Prototype *getObject();
 
-    bool eol(){
-        return current == nullptr;
-    }
+    int get_size();
 
+    void clearSelection ();
 
-    Prototype *getObject(){
-        return current ? current->prototype : nullptr;
-    }
+    void deleteCircles ();
 
-    int get_size(){
-        int count =0;
-        for(this->first();!this->eol();this->next()) count++;
-        return count;
-    }
+    Prototype* exclude(Prototype* obj);
 
-    void clearSelection (){
-        qDebug()<<"enter to ClearSelection";
-        for(this->first();!this->eol();this->next()){
-            qDebug()<<"enter to loop in ClearSelection";
-            if(this->getObject()->isSelect_()){
-                qDebug()<<"enter to if in ClearSelection";
-                this->getObject()->ClearSelect();
-                qDebug()<<"over from if in ClearSelection";
-            }
-            qDebug()<<"over from loop in ClearSelection";
-        }
-        qDebug()<<"over from ClearSelection";
-    }
+    Prototype* exclude_first();
 
-    void deleteCircles (){
-        Node* prev = nullptr;
-        Node* node = head;
-        Node* toDelete = nullptr;
+    Prototype*createProto(QTextStream &in, QWidget* parent = nullptr);
 
-        while(node){
-            if(node->prototype->isSelect_()){
-                toDelete = node;
-                node = node->next;
+    void SaveSelf(QString filename);
 
-                if(prev){
-                    prev->next = node;
-                }
-                else {
-                    head = node;
-                }
-
-                if(!node){
-                    tail = prev;
-                }
-
-                delete toDelete;
-            }
-            else {
-                prev = node;
-                node = node->next;
-            }
-        }
-    }
-
-    Prototype* exclude(Prototype* obj) {
-        Node* prev = nullptr;
-        Node* curr = head;
-        Prototype* toExclude;
-
-        while (curr) {
-            if (curr->prototype == obj) {
-                toExclude = curr->prototype;
-
-                if (prev) {
-                    prev->next = curr->next;
-                } else {
-                    head = curr->next;
-                }
-
-                if (curr == tail) {
-                    tail = prev;
-                }
-                curr->prototype = nullptr;
-                delete curr;
-
-                return toExclude;
-            }
-            prev = curr;
-            curr = curr->next;
-        }
-        return nullptr;
-    }
-
-    Prototype* exclude_first(){
-        Prototype*toExclude = head->prototype;
-        head->prototype = nullptr;
-        delete head;
-        head=head->next;
-        return toExclude;
-    }
-
-    Prototype*createProto(QTextStream &in, QWidget* parent = nullptr){
-        QString sym = in.readLine();
-        if(sym == "C"){
-            qDebug()<<"return Circle";
-            return new Circle(parent);
-        }
-        else if(sym == "R"){
-            qDebug()<<"return Circle";
-            return new Rect(parent);
-        }
-        else if(sym == "T"){
-            qDebug()<<"return Circle";
-            return new Triangle(parent);
-        }
-        else if(sym == "S"){
-            qDebug()<<"return Circle";
-            return new Section(parent);
-        }
-    }
-
-    void SaveSelf(QString filename){
-        QFile file(filename);
-        if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            QTextStream out(&file);
-            out << get_size()<<'\n';
-            for(first();!eol();next()){
-                getObject()->Save(out);
-            }
-        file.close();
-        }
-    }
-
-    void LoadFrom(QString filename, QWidget*parent){
-        Prototype*obj;
-        QFile file(filename);
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QTextStream in(&file);
-            QString line = in.readLine();
-            int size = line.toInt();
-                for(int i = 0 ; i<size; i++){
-                        obj = createProto(in, parent);
-                        obj->Load(in);
-                        obj->show();
-                        add(obj);
-                }
-            file.close();
-        }
-    }
+    void LoadFrom(QString filename, QWidget*parent);
 
 };
 

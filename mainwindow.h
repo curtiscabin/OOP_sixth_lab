@@ -2,14 +2,14 @@
 #define MAINWINDOW_H
 #pragma once
 
-#include <QMainWindow>
+#include<QMainWindow>
 #include<QMouseEvent>
-// #include"mystorage.h"
+#include"mystorage.h"
 #include"shapes.h"
-#include"prototype.h"
 #include"group.h"
 #include<QRubberBand>
-#include <QFileDialog>
+#include<QFileDialog>
+#include<QColorDialog>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -36,13 +36,14 @@ private slots:
 
     void on_CloseApp_triggered();
 
+    void on_pushButtonColor_clicked();
+
 private:
     Ui::MainWindow *ui;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *) override;
     void keyPressEvent(QKeyEvent *event) override;
-    void EditColorByRadioBtton();
     void onPrototypeEditPressed(Prototype *sh);
     Shape* GiveMe();
     MyStorage *store;
@@ -50,7 +51,7 @@ private:
     QPoint e;
     QPoint delta;
     QPoint postpoint;
-    QString color;
+    QColor color = "white";
     Shape *s = nullptr;
     bool isSelecting = false;
     bool groupResizing = false;

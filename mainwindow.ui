@@ -37,98 +37,54 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QComboBox" name="comboBox">
-       <property name="font">
-        <font>
-         <pointsize>14</pointsize>
-        </font>
-       </property>
-       <property name="editable">
-        <bool>false</bool>
-       </property>
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <property name="placeholderText">
-        <string>Выберите фигуру</string>
-       </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <property name="text">
-         <string>Эллипс</string>
-        </property>
+        <widget class="QComboBox" name="comboBox">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <property name="placeholderText">
+          <string>Выберите фигуру</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>Эллипс</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Прямоугольник</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Треугольник</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Отрезок</string>
+          </property>
+         </item>
+        </widget>
        </item>
        <item>
-        <property name="text">
-         <string>Прямоугольник</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Треугольник</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Отрезок</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="1" column="3">
-        <widget class="QRadioButton" name="radioOrange">
-         <property name="text">
-          <string>Оранжевый</string>
+        <widget class="QPushButton" name="pushButtonColor">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
          </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QRadioButton" name="radioGreen">
          <property name="text">
-          <string>Зеленый</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QRadioButton" name="radioBlack">
-         <property name="text">
-          <string>Черный</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QRadioButton" name="radioPink">
-         <property name="text">
-          <string>Розовый</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QRadioButton" name="radioYellow">
-         <property name="text">
-          <string>Желтый</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QRadioButton" name="radioRed">
-         <property name="text">
-          <string>Красный</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QRadioButton" name="radioBlue">
-         <property name="text">
-          <string>Синий</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QRadioButton" name="radioWhite">
-         <property name="text">
-          <string>Белый</string>
+          <string>Выбрать цвет</string>
          </property>
         </widget>
        </item>
@@ -148,19 +104,19 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_ungroup">
-         <property name="font">
-          <font>
-           <pointsize>14</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Разгруппировать</string>
-         </property>
-        </widget>
-       </item>
       </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_ungroup">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Разгруппировать</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>

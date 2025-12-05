@@ -8,19 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     store = new MyStorage();
 
-    connect(ui->radioBlue,&QRadioButton::clicked,this,&MainWindow::EditColorByRadioBtton);
-    connect(ui->radioGreen,&QRadioButton::clicked,this,&MainWindow::EditColorByRadioBtton);
-    connect(ui->radioOrange,&QRadioButton::clicked,this,&MainWindow::EditColorByRadioBtton);
-    connect(ui->radioBlack,&QRadioButton::clicked,this,&MainWindow::EditColorByRadioBtton);
-    connect(ui->radioPink,&QRadioButton::clicked,this,&MainWindow::EditColorByRadioBtton);
-    connect(ui->radioRed,&QRadioButton::clicked,this,&MainWindow::EditColorByRadioBtton);
-    connect(ui->radioWhite,&QRadioButton::clicked,this,&MainWindow::EditColorByRadioBtton);
-    connect(ui->radioYellow,&QRadioButton::clicked,this,&MainWindow::EditColorByRadioBtton);
-
-    ui->radioWhite->setChecked(true);
-    EditColorByRadioBtton();
 }
-
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -137,39 +125,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
 
 }
 
-void MainWindow::EditColorByRadioBtton(){
-if (ui->radioBlue->isChecked()){
-        color = "blue";
-    }
-    else if (ui->radioBlack->isChecked()){
-        color = "black";
-    }
-    else if (ui->radioGreen->isChecked()){
-        color = "green";
-    }
-    else if (ui->radioOrange->isChecked()){
-        color = "orange";
-    }
-    else if (ui->radioPink->isChecked()){
-        color = "pink";
-    }
-    else if (ui->radioRed->isChecked()){
-        color = "red";
-    }
-    else if (ui->radioWhite->isChecked()){
-        color = "white";
-    }
-    else if (ui->radioYellow->isChecked()){
-        color = "yellow";
-    }
-
-    for(store->first();!store->eol();store->next()){
-        if(store->getObject()->isSelect_()){
-            store->getObject()->EditColor(color);
-        }
-    }
-
-}
 
 Shape* MainWindow::GiveMe(){
     int key = ui->comboBox->currentIndex();
@@ -273,5 +228,18 @@ void MainWindow::on_SaveFile_triggered()
 void MainWindow::on_CloseApp_triggered()
 {
     QApplication::quit();
+}
+
+
+void MainWindow::on_pushButtonColor_clicked()
+{
+    color = QColorDialog::getColor(QColor(255, 100, 200, 255));
+    if (!color.isValid()) return;
+
+    for(store->first();!store->eol();store->next()){
+        if(store->getObject()->isSelect_()){
+            store->getObject()->EditColor(color);
+        }
+    }
 }
 
