@@ -117,11 +117,11 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
         qDebug()<<"Key is O";
         on_LoadFile_triggered();
     }
-    else if (key == Qt::Key_S){
-        qDebug()<<"Key is S";
-        if(!filename.isEmpty())store->SaveSelf(filename);
-        else on_SaveFile_triggered();
-    }
+    // else if (key == Qt::Key_S){
+    //     qDebug()<<"Key is S";
+    //     if(!filename.isEmpty())store->SaveSelf(filename);
+    //     else on_SaveFile_triggered();
+    // }
 
 }
 
@@ -203,14 +203,14 @@ void MainWindow::on_LoadFile_triggered()
 {
     filename = QFileDialog::getOpenFileName(this, "Открыть файл", "C:\\my_projects\\qt_projects\\OOP_sixth_lab\\saves", "Текстовые файлы (*.txt);;Все файлы (*.*)");
 
-    if (!filename.isEmpty()) {
-        qDebug() << "Выбран файл:" << filename;
-        store->LoadFrom(filename, this);
-    }
+    // if (!filename.isEmpty()) {
+    //     qDebug() << "Выбран файл:" << filename;
+    //     store->LoadFrom(filename, this);
+    // }
 
-    for(store->first();!store->eol();store->next()){
-        connect(store->getObject(), &Prototype::editPressed,this, &MainWindow::onPrototypeEditPressed);
-    }
+    // for(store->first();!store->eol();store->next()){
+    //     connect(store->getObject(), &Prototype::editPressed,this, &MainWindow::onPrototypeEditPressed);
+    // }
 }
 
 
@@ -220,7 +220,12 @@ void MainWindow::on_SaveFile_triggered()
 
     if (!filename.isEmpty()) {
         qDebug() << "Сохранить в:" << filename;
-        store->SaveSelf(filename);
+        QFile file(filename);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            QTextStream out(&file);
+            store->SaveSelf(out);
+            file.close();
+        }
     }
 }
 

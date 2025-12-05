@@ -110,9 +110,8 @@ QString Group::getSymbol(){
 }
 
 void Group::Save(QTextStream &out) {
-    // for(group_store->first();!group_store->eol();group_store->next()){
-    //     group_store->getObject()->Save(out);
-    // }
+    out<<getSymbol()<<"\n";
+    group_store->SaveSelf(out);
 }
 
 void Group::Load(QTextStream &in) {

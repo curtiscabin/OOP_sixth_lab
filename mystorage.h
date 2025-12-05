@@ -41,9 +41,9 @@ public:
 
     Prototype*createProto(QTextStream &in, QWidget* parent = nullptr);
 
-    void SaveSelf(QString filename);
+    void SaveSelf(QTextStream &out);
 
-    void LoadFrom(QString filename, QWidget*parent);
+    void LoadFrom(QTextStream &in, QWidget*parent);
 
 };
 

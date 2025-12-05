@@ -135,31 +135,26 @@ Prototype *MyStorage::createProto(QTextStream &in, QWidget *parent){
     }
 }
 
-void MyStorage::SaveSelf(QString filename){
-    QFile file(filename);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        QTextStream out(&file);
-        out << get_size()<<'\n';
-        for(first();!eol();next()){
-            getObject()->Save(out);
-        }
-        file.close();
+void MyStorage::SaveSelf(QTextStream &out){
+    out<<get_size()<<"\n";
+    for(first();!eol();next()){
+        getObject()->Save(out);
     }
 }
 
-void MyStorage::LoadFrom(QString filename, QWidget *parent){
-    Prototype*obj;
-    QFile file(filename);
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QTextStream in(&file);
-        QString line = in.readLine();
-        int size = line.toInt();
-        for(int i = 0 ; i<size; i++){
-            obj = createProto(in, parent);
-            obj->Load(in);
-            obj->show();
-            add(obj);
-        }
-        file.close();
-    }
+void MyStorage::LoadFrom(QTextStream &in, QWidget *parent){
+    // Prototype*obj;
+    // QFile file(filename);
+    // if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    //     QTextStream in(&file);
+    //     QString line = in.readLine();
+    //     int size = line.toInt();
+    //     for(int i = 0 ; i<size; i++){
+    //         obj = createProto(in, parent);
+    //         obj->Load(in);
+    //         obj->show();
+    //         add(obj);
+    //     }
+    //     file.close();
+    // }
 }
