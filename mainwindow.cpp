@@ -187,9 +187,12 @@ void MainWindow::on_pushButton_ungroup_clicked()
     for(store->first();!store->eol();){
         Prototype*group_maybe = store->getObject();
         if(group_maybe->isSelect_() && dynamic_cast<Group*>(group_maybe)){
+            qDebug()<<"iti a Group";
             Group*ungroup = dynamic_cast<Group*>(store->exclude(group_maybe));
             while(!ungroup->isEmpty()){
-                store->add(ungroup->exclude_first());
+                Prototype* obj= ungroup->exclude_first();
+                connect(obj, &Prototype::editPressed,this, &MainWindow::onPrototypeEditPressed);
+                store->add(obj);
             }
             delete ungroup;
         }
@@ -203,20 +206,27 @@ void MainWindow::on_LoadFile_triggered()
 {
     filename = QFileDialog::getOpenFileName(this, "Открыть файл", "C:\\my_projects\\qt_projects\\OOP_sixth_lab\\saves", "Текстовые файлы (*.txt);;Все файлы (*.*)");
 
-    // if (!filename.isEmpty()) {
-    //     qDebug() << "Выбран файл:" << filename;
-    //     store->LoadFrom(filename, this);
-    // }
+    if (!filename.isEmpty()) {
+        qDebug() << "Выбран файл:" << filename;
+        QFile file(filename);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream in(&file);
+            store->LoadFrom(in, this);
+            file.close();
+        }
+    }
 
-    // for(store->first();!store->eol();store->next()){
-    //     connect(store->getObject(), &Prototype::editPressed,this, &MainWindow::onPrototypeEditPressed);
-    // }
+
+
+    for(store->first();!store->eol();store->next()){
+        connect(store->getObject(), &Prototype::editPressed,this, &MainWindow::onPrototypeEditPressed);
+    }
 }
 
 
 void MainWindow::on_SaveFile_triggered()
 {
-    filename = QFileDialog::getSaveFileName(this, "Сохранить файл", "C:\\my_projects\\qt_projects\\OOP_sixth_lab\\saves","Текстовые файлы (*.txt);;Все файлы (*.*)");
+    filename = QFileDialog::getSaveFileName(this,"Сохранить файл", "C:\\my_projects\\qt_projects\\OOP_sixth_lab\\saves","Текстовые файлы (*.txt);;Все файлы (*.*)", nullptr,QFileDialog::DontConfirmOverwrite);
 
     if (!filename.isEmpty()) {
         qDebug() << "Сохранить в:" << filename;

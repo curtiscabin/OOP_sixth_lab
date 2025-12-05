@@ -1,7 +1,7 @@
 #include"prototype.h"
 
 
-Prototype::Prototype(QWidget *parent) : QWidget(parent), sizeX(0), sizeY(0) {}
+Prototype::Prototype(QWidget *parent) : QWidget(parent) {}
 
 Prototype::Prototype() {
     qDebug()<<"created Proto without parametrs";

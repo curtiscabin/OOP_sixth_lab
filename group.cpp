@@ -39,7 +39,9 @@ void Group::push(Prototype *obj){
 }
 
 Prototype *Group::exclude_first(){
-    return group_store->exclude_first();
+    Prototype*obj = group_store->exclude_first();
+    obj->SetSelect();
+    return obj;
 }
 
 bool Group::isEmpty(){
@@ -53,9 +55,6 @@ void Group::SetSelect() {
 }
 
 void Group::ClearSelect() {
-    for(group_store->first();!group_store->eol();group_store->next()){
-        group_store->getObject()->ClearSelect();
-    }
     isSelect = false;
     updateEditButton();
     update();
@@ -115,7 +114,9 @@ void Group::Save(QTextStream &out) {
 }
 
 void Group::Load(QTextStream &in) {
-    // for(group_store->first();!group_store->eol();group_store->next()){
-    //     group_store->getObject()->Load(in);
-    // }
+    group_store->LoadFrom(in, parentWidget());
+    ClearSelect();
+    updateSize();
+    show();
+    this->raise();
 }

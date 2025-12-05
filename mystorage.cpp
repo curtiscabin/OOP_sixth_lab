@@ -1,5 +1,6 @@
 #include"mystorage.h"
 #include"shapes.h"
+#include"group.h"
 
 MyStorage::MyStorage() : head(nullptr),tail(nullptr),current(nullptr) {}
 
@@ -133,6 +134,10 @@ Prototype *MyStorage::createProto(QTextStream &in, QWidget *parent){
         qDebug()<<"return Circle";
         return new Section(parent);
     }
+    else if(sym == "G"){
+        qDebug()<<"return Group";
+        return new Group(parent);
+    }
 }
 
 void MyStorage::SaveSelf(QTextStream &out){
@@ -143,18 +148,13 @@ void MyStorage::SaveSelf(QTextStream &out){
 }
 
 void MyStorage::LoadFrom(QTextStream &in, QWidget *parent){
-    // Prototype*obj;
-    // QFile file(filename);
-    // if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-    //     QTextStream in(&file);
-    //     QString line = in.readLine();
-    //     int size = line.toInt();
-    //     for(int i = 0 ; i<size; i++){
-    //         obj = createProto(in, parent);
-    //         obj->Load(in);
-    //         obj->show();
-    //         add(obj);
-    //     }
-    //     file.close();
-    // }
+    Prototype*obj;
+    QString line = in.readLine();
+    int size = line.toInt();
+    for(int i = 0 ; i<size; i++){
+        obj = createProto(in, parent);
+        obj->Load(in);
+        add(obj);
+    }
+
 }

@@ -13,6 +13,7 @@ Shape::Shape(const QPoint &b, const QPoint &e, QWidget *parent) : Prototype(pare
 }
 
 Shape::Shape(QWidget *parent) : Prototype(parent){
+
 }
 
 Shape::~Shape(){
@@ -137,6 +138,7 @@ void Shape::Load(QTextStream &in) {
     move(x,y);
     setFixedSize(sizeX,sizeY);
     EditColor(color);
+    show();
 }
 
 Circle::Circle(const QPoint &b, const QPoint &e, QWidget *parent) : Shape(b, e, parent){
