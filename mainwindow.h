@@ -57,6 +57,7 @@ private:
     QPoint lastResizePos;
     QRubberBand* rubBand = nullptr;
     Group* group = nullptr;
+    QString filename;
 
 };
 #endif // MAINWINDOW_H

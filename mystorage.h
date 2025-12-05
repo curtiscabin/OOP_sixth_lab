@@ -202,23 +202,13 @@ public:
         if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             QTextStream in(&file);
             QString line = in.readLine();
-            bool ok;
-            int size = line.toInt(&ok);
-            if (ok) {
-                qDebug() << "Size in file:" << size;
+            int size = line.toInt();
                 for(int i = 0 ; i<size; i++){
-                    // QString symbol = in.readLine();
-                    // qDebug()<<"Symbol is "<<symbol;
-                    // if(!symbol.isEmpty()){
                         obj = createProto(in, parent);
                         obj->Load(in);
                         obj->show();
                         add(obj);
-                    // }
                 }
-            } else {
-                qDebug() << "Error of reading file";
-            }
             file.close();
         }
     }

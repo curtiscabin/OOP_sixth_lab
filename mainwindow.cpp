@@ -125,6 +125,15 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
         qDebug()<<"Key is Delete";
         store->deleteCircles();
     }
+    else if (key == Qt::Key_O){
+        qDebug()<<"Key is O";
+        on_LoadFile_triggered();
+    }
+    else if (key == Qt::Key_S){
+        qDebug()<<"Key is S";
+        if(!filename.isEmpty())store->SaveSelf(filename);
+        else on_SaveFile_triggered();
+    }
 
 }
 
@@ -237,7 +246,7 @@ void MainWindow::on_pushButton_ungroup_clicked()
 
 void MainWindow::on_LoadFile_triggered()
 {
-    QString filename = QFileDialog::getOpenFileName(this, "Открыть файл", "C:\\my_projects\\qt_projects\\OOP_sixth_lab\\saves", "Текстовые файлы (*.txt);;Все файлы (*.*)");
+    filename = QFileDialog::getOpenFileName(this, "Открыть файл", "C:\\my_projects\\qt_projects\\OOP_sixth_lab\\saves", "Текстовые файлы (*.txt);;Все файлы (*.*)");
 
     if (!filename.isEmpty()) {
         qDebug() << "Выбран файл:" << filename;
@@ -252,7 +261,7 @@ void MainWindow::on_LoadFile_triggered()
 
 void MainWindow::on_SaveFile_triggered()
 {
-    QString filename = QFileDialog::getSaveFileName(this, "Сохранить файл", "C:\\my_projects\\qt_projects\\OOP_sixth_lab\\saves","Текстовые файлы (*.txt);;Все файлы (*.*)");
+    filename = QFileDialog::getSaveFileName(this, "Сохранить файл", "C:\\my_projects\\qt_projects\\OOP_sixth_lab\\saves","Текстовые файлы (*.txt);;Все файлы (*.*)");
 
     if (!filename.isEmpty()) {
         qDebug() << "Сохранить в:" << filename;
