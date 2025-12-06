@@ -28,11 +28,9 @@ public:
 
     void ClearSelect() override;
 
-    bool isSelect_() override {
-        return isSelect;
-    }
+    bool isSelect_() override;
 
-    bool MoveShape(const QPoint&delta) override;
+    bool MoveProto(const QPoint&delta) override;
 
     void EditColor(const QColor &c) override;
 

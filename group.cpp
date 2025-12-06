@@ -59,7 +59,11 @@ void Group::ClearSelect() {
     update();
 }
 
-bool Group::MoveShape(const QPoint &delta) {
+bool Group::isSelect_() {
+    return isSelect;
+}
+
+bool Group::MoveProto(const QPoint &delta) {
     int nx = x() + delta.x();
     int ny = y() + delta.y();
 
@@ -69,7 +73,7 @@ bool Group::MoveShape(const QPoint &delta) {
     move(nx,ny);
 
     for(group_store->first();!group_store->eol();group_store->next()){
-        group_store->getObject()->MoveShape(delta);
+        group_store->getObject()->MoveProto(delta);
     }
     return true;
 }

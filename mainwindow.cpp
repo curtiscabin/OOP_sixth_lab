@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete store;
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event){
@@ -49,10 +50,10 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
     }
 }
 
-void MainWindow::mouseMoveEvent(QMouseEvent *event){
+void MainWindow::mouseMoveEvent(QMouseEvent *event){//moveclick
     e = event->pos();
-    if(event->buttons() & Qt::LeftButton){
-        if (groupResizing) {
+    if(event->buttons() & Qt::LeftButton){//left click
+        if (isResizing) {//resizing
             delta = e - lastResizePos;
             lastResizePos = e;
 
@@ -63,7 +64,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
             }
             return;
         }
-        if (!isSelecting ){
+        if (!isSelecting ){//creating
             if(!s){
                 s = GiveMe();
                 s->EditColor(color);
@@ -73,28 +74,34 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
             s->PaintShape();
         }
 
-        else{
+        else{//moving
+            isMoving = true;
             delta = e - postpoint;
             postpoint = e;
-            for(store->first();!store->eol();store->next()){
-                if(store->getObject()->isSelect_()) {
-                    if(!store->getObject()->MoveShape(delta)){
-                        return;
-                    }
-                }
-            }
+
+            com = new MoveCommand(delta, store);
+            com->execute();
+            delete com;
         }
     }
-    else if (event->buttons() & Qt::RightButton){
+    else if (event->buttons() & Qt::RightButton){//right click -> rubberBand
         if(rubBand)rubBand->setGeometry(QRect(b,e).normalized());
     }
 }
 
-void MainWindow::mouseReleaseEvent(QMouseEvent *){
-    s = nullptr;
-    if (groupResizing) {
-        groupResizing = false;
+void MainWindow::mouseReleaseEvent(QMouseEvent *){//unclick
+    if(s) s = nullptr;
+    if (isResizing) {//stop resizing
+        isResizing = false;
         releaseMouse();
+    }
+    if(isMoving){
+        isMoving = false;
+        delta = e - b;
+        undo.push(new MoveCommand(delta, store));
+        while(!redo.isEmpty()){
+            redo.pop();
+        }
     }
     if(rubBand && rubBand->isVisible()){
         for(store->first();!store->eol();store->next()){
@@ -121,6 +128,26 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
         qDebug()<<"Key is S";
         if(!filename.isEmpty())store->SaveOpen(filename);
         else on_SaveFile_triggered();
+    }
+    else if(key == Qt::Key_Z && (event->modifiers() & Qt::ShiftModifier)){
+        qDebug()<<"Key is Z and Shift";
+        if(!redo.isEmpty())
+        {
+            com = redo.top();
+            redo.pop();
+            com->execute();
+            undo.push(com);
+        }
+    }
+    else if(key == Qt::Key_Z){
+        qDebug()<<"Key is Z";
+        if(!undo.isEmpty())
+        {
+            com = undo.top();
+            undo.pop();
+            com->unexecute();
+            redo.push(com);
+        }
     }
 
 }
@@ -154,7 +181,7 @@ Shape* MainWindow::GiveMe(){
 void MainWindow::onPrototypeEditPressed(Prototype *sh)
 {
     if(sh->isSelect_()){
-        groupResizing = true;
+        isResizing = true;
         lastResizePos = mapFromGlobal(QCursor::pos());
         grabMouse();
     }
@@ -246,8 +273,15 @@ void MainWindow::on_CloseApp_triggered()
 
 void MainWindow::on_pushButtonColor_clicked()
 {
+
     color = QColorDialog::getColor(QColor(255, 100, 200, 255));
-    if (!color.isValid()) return;
+    if (!color.isValid())
+    {
+        qDebug()<<color;
+        color = "white";
+        return;
+    }
+    qDebug()<<color;
 
     for(store->first();!store->eol();store->next()){
         if(store->getObject()->isSelect_()){

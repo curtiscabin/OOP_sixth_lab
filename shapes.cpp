@@ -40,7 +40,7 @@ void Shape::PaintShape(){
     show();
 }
 
-bool Shape::MoveShape(const QPoint &delta) {
+bool Shape::MoveProto(const QPoint &delta) {
     int nx = x() + delta.x();
     int ny = y() + delta.y();
 

@@ -7,9 +7,11 @@
 #include"mystorage.h"
 #include"shapes.h"
 #include"group.h"
+#include"command.h"
 #include<QRubberBand>
 #include<QFileDialog>
 #include<QColorDialog>
+#include<QStack>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -54,11 +56,15 @@ private:
     QColor color = "white";
     Shape *s = nullptr;
     bool isSelecting = false;
-    bool groupResizing = false;
+    bool isResizing = false;
+    bool isMoving = false;
     QPoint lastResizePos;
     QRubberBand* rubBand = nullptr;
     Group* group = nullptr;
     QString filename;
+    Command* com = nullptr;
+    QStack<Command*> undo;
+    QStack<Command*> redo;
 
 };
 #endif // MAINWINDOW_H

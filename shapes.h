@@ -23,7 +23,7 @@ public:
 
     void PaintShape();
 
-    bool MoveShape(const QPoint&delta) override;
+    bool MoveProto(const QPoint&delta) override;
 
     void EditColor(const QColor &c) override;
 
