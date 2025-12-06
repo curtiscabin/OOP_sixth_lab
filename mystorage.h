@@ -45,6 +45,10 @@ public:
 
     void LoadFrom(QTextStream &in, QWidget*parent);
 
+    void SaveOpen(const QString &filename);
+
+    void LoadOpen(const QString &filename, QWidget*parent);
+
 };
 
 #endif // MYSTORAGE_H

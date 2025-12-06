@@ -117,11 +117,11 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
         qDebug()<<"Key is O";
         on_LoadFile_triggered();
     }
-    // else if (key == Qt::Key_S){
-    //     qDebug()<<"Key is S";
-    //     if(!filename.isEmpty())store->SaveSelf(filename);
-    //     else on_SaveFile_triggered();
-    // }
+    else if (key == Qt::Key_S){
+        qDebug()<<"Key is S";
+        if(!filename.isEmpty())store->SaveOpen(filename);
+        else on_SaveFile_triggered();
+    }
 
 }
 
@@ -207,22 +207,6 @@ void MainWindow::on_pushButton_ungroup_clicked()
         }
     }
 
-    // for(store->first();!store->eol();){
-    //     Prototype*group_maybe = store->getObject();
-    //     if(group_maybe->isSelect_() && dynamic_cast<Group*>(group_maybe)){
-    //         qDebug()<<"iti a Group";
-    //         Group*ungroup = dynamic_cast<Group*>(store->exclude(group_maybe));
-    //         while(!ungroup->isEmpty()){
-    //             Prototype* obj= ungroup->exclude_first();
-    //             connect(obj, &Prototype::editPressed,this, &MainWindow::onPrototypeEditPressed);
-    //             store->add(obj);
-    //             obj->SetSelect();
-    //         }
-    //         delete ungroup;
-    //     }
-
-    //     else store->next();
-    // }
 }
 
 
@@ -232,12 +216,7 @@ void MainWindow::on_LoadFile_triggered()
 
     if (!filename.isEmpty()) {
         qDebug() << "Выбран файл:" << filename;
-        QFile file(filename);
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QTextStream in(&file);
-            store->LoadFrom(in, this);
-            file.close();
-        }
+        store->LoadOpen(filename, this);
     }
 
 
@@ -254,12 +233,7 @@ void MainWindow::on_SaveFile_triggered()
 
     if (!filename.isEmpty()) {
         qDebug() << "Сохранить в:" << filename;
-        QFile file(filename);
-        if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            QTextStream out(&file);
-            store->SaveSelf(out);
-            file.close();
-        }
+        store->SaveOpen(filename);
     }
 }
 

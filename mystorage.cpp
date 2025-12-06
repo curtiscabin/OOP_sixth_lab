@@ -162,3 +162,23 @@ void MyStorage::LoadFrom(QTextStream &in, QWidget *parent){
     }
 
 }
+
+void MyStorage::SaveOpen(const QString &filename)
+{
+    QFile file(filename);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        QTextStream out(&file);
+        SaveSelf(out);
+        file.close();
+    }
+}
+
+void MyStorage::LoadOpen(const QString &filename, QWidget *parent)
+{
+    QFile file(filename);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        LoadFrom(in, parent);
+        file.close();
+    }
+}
