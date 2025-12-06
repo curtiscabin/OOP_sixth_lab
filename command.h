@@ -14,9 +14,13 @@ public:
 
     ~Command();
 
-    virtual void execute() = 0;
+    void execute();
 
-    virtual void unexecute() = 0;
+    void unexecute();
+
+    virtual void doit(Prototype*obj) = 0;
+
+    virtual void undoit(Prototype*obj) = 0;
 
 };
 
@@ -25,9 +29,9 @@ class MoveCommand : public Command {
 public:
     MoveCommand(QPoint delta, MyStorage* external);
 
-    void execute() override;
+    void doit(Prototype*obj) override;
 
-    void unexecute() override;
+    void undoit(Prototype*obj) override;
 
 };
 
@@ -35,23 +39,30 @@ class DeleteCommand : public Command {
 public:
     DeleteCommand(MyStorage* external);
 
-    void execute() override;
+    void doit(Prototype*obj) override;
 
-    void unexecute() override;
+    void undoit(Prototype*obj) override;
 };
 
-// class GroupCommand : public Command {
-//     MyStorage *store;
-//     Group* group;
-// public:
-//     GroupCommand (MyStorage* store);
+class GroupCommand : public Command {
+    Group*ingroup;
+public:
+    GroupCommand(MyStorage* external);
 
-//     void execute() override;
+    void doit(Prototype *obj) override;
 
-//     void unexecute() override;
-// };
+    void undoit(Prototype *obj) override;
+};
 
+class EditColorCommand : public Command {
+    QColor color;
+    QList<QColor>colors;
+public:
+    EditColorCommand(MyStorage* external, const QColor& color);
 
+    void doit(Prototype*obj) override;
 
+    void undoit(Prototype*obj) override;
+};
 
 #endif // COMMAND_H

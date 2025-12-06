@@ -99,9 +99,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *){//unclick
         isMoving = false;
         delta = e - b;
         undo.push(new MoveCommand(delta, store));
-        while(!redo.isEmpty()){
-            redo.pop();
-        }
+        eraseRedo();
     }
     if(rubBand && rubBand->isVisible()){
         for(store->first();!store->eol();store->next()){
@@ -122,6 +120,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
         com->execute();
         undo.push(com);
         com = nullptr;
+        eraseRedo();
     }
     else if (key == Qt::Key_O){
         qDebug()<<"Key is O";
@@ -179,6 +178,13 @@ Shape* MainWindow::GiveMe(){
 
     return ns;
 
+}
+
+void MainWindow::eraseRedo()
+{
+    while(!redo.isEmpty()){
+        redo.pop();
+    }
 }
 
 void MainWindow::onPrototypeEditPressed(Prototype *sh)
@@ -286,10 +292,9 @@ void MainWindow::on_pushButtonColor_clicked()
     }
     qDebug()<<color;
 
-    for(store->first();!store->eol();store->next()){
-        if(store->getObject()->isSelect_()){
-            store->getObject()->EditColor(color);
-        }
-    }
+    com = new EditColorCommand(store, color);
+    com->execute();
+    undo.push(com);
+    eraseRedo();
 }
 

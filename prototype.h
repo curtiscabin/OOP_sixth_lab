@@ -53,6 +53,8 @@ public:
 
     virtual void showProto() = 0;
 
+    virtual QColor getColor() = 0;
+
 signals:
     void editPressed(Prototype *self);
 

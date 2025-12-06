@@ -38,6 +38,8 @@ public:
     void hideProto() override;
 
     void showProto() override;
+
+    QColor getColor() override;
 };
 
 

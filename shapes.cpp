@@ -149,6 +149,10 @@ void Shape::showProto(){
     show();
 }
 
+QColor Shape::getColor(){
+    return color;
+}
+
 Circle::Circle(const QPoint &b, const QPoint &e, QWidget *parent) : Shape(b, e, parent){
     qDebug()<<"Created Circle";
 }

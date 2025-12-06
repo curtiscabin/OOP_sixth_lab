@@ -47,6 +47,8 @@ public:
 
     void showProto() override;
 
+    QColor getColor() override;
+
 };
 
 #endif // GROUP_H

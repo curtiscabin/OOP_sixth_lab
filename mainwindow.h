@@ -48,6 +48,7 @@ private:
     void keyPressEvent(QKeyEvent *event) override;
     void onPrototypeEditPressed(Prototype *sh);
     Shape* GiveMe();
+    void eraseRedo();
     MyStorage *store;
     QPoint b;
     QPoint e;

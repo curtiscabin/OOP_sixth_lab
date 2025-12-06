@@ -137,3 +137,8 @@ void Group::showProto() {
         group_store->getObject()->show();
     }
 }
+
+QColor Group::getColor(){
+    group_store->first();
+    return group_store->getObject()->getColor();
+}

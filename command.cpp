@@ -19,40 +19,69 @@ Command::~Command(){
     delete internal;
 }
 
+void Command::execute(){
+    for(internal->first();!internal->eol();internal->next()){
+        doit(internal->getObject());
+    }
+}
+
+void Command::unexecute(){
+    for(internal->first();!internal->eol();internal->next()){
+        undoit(internal->getObject());
+    }
+}
+
 MoveCommand::MoveCommand(QPoint delta, MyStorage *external) : delta(delta), Command(external){
-
 }
 
-void MoveCommand::execute() {
-    for(internal->first();!internal->eol();internal->next()){
-        internal->getObject()->MoveProto(delta);
-    }
+void MoveCommand::doit(Prototype*obj) {
+    obj->MoveProto(delta);
 }
 
-void MoveCommand::unexecute() {
-    for(internal->first();!internal->eol();internal->next()){
-        internal->getObject()->MoveProto(-delta);
-    }
+void MoveCommand::undoit(Prototype*obj) {
+    obj->MoveProto(-delta);
 }
 
 DeleteCommand::DeleteCommand(MyStorage *external): Command(external){
+}
+
+void DeleteCommand::doit(Prototype*obj) {
+    external->exclude(obj);
+    obj->hideProto();
+}
+
+void DeleteCommand::undoit(Prototype*obj) {
+    external->add(obj);
+    obj->showProto();
+}
+
+GroupCommand::GroupCommand(MyStorage *external) : Command(external)
+{
+    ingroup = new Group;
+}
+
+void GroupCommand::doit(Prototype *obj)
+{
 
 }
 
-void DeleteCommand::execute() {
-    for(internal->first();!internal->eol();internal->next()){
-        Prototype*obj = internal->getObject();
-        external->exclude(obj);
-        obj->hideProto();
-    }
+void GroupCommand::undoit(Prototype *obj)
+{
+
 }
 
-void DeleteCommand::unexecute() {
-    for(internal->first();!internal->eol();internal->next()){
-        Prototype*obj = internal->getObject();
-        external->add(obj);
-        obj->showProto();
-    }
+EditColorCommand::EditColorCommand(MyStorage *external, const QColor &color) : Command(external), color(color)
+{
 }
 
+void EditColorCommand::doit(Prototype *obj)
+{
+    colors.push_back(obj->getColor());
+    obj->EditColor(color);
+}
 
+void EditColorCommand::undoit(Prototype *obj)
+{
+
+    obj->EditColor(colors.takeFirst());
+}
