@@ -198,23 +198,21 @@ void MainWindow::onPrototypeEditPressed(Prototype *sh)
 
 void MainWindow::on_pushButton_group_clicked()
 {
-    group = new Group(this);
+    com = new GroupCommand(store, this);
+    com->execute();
+    undo.push(com);
+    eraseRedo();
 
-    connect(group, &Prototype::editPressed, this, &MainWindow::onPrototypeEditPressed);
-
-    store->first();
-    while(!store->eol()) {
-        if(store->getObject()->isSelect_()) {
-            group->push(store->exclude(store->getObject()));
-            store->first();
-        } else {
-            store->next();
+    for(store->first();!store->eol();store->next()){
+        Prototype* group_maybe = store->getObject();
+        if(dynamic_cast<Group*>(group_maybe) && group_maybe->isSelect_()){
+            connect(group_maybe, &Prototype::editPressed, this, &MainWindow::onPrototypeEditPressed);
         }
     }
 
-    if(!group->isEmpty())
-        store->add(group);
-    else delete group;
+
+
+
 }
 
 

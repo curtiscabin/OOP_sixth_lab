@@ -14,9 +14,9 @@ public:
 
     ~Command();
 
-    void execute();
+    virtual void execute();
 
-    void unexecute();
+    virtual void unexecute();
 
     virtual void doit(Prototype*obj) = 0;
 
@@ -46,12 +46,17 @@ public:
 
 class GroupCommand : public Command {
     Group*ingroup;
+    QWidget*parent;
 public:
-    GroupCommand(MyStorage* external);
+    GroupCommand(MyStorage* external, QWidget*parent);
 
     void doit(Prototype *obj) override;
 
     void undoit(Prototype *obj) override;
+
+    void execute() override;
+
+    void unexecute() override;
 };
 
 class EditColorCommand : public Command {

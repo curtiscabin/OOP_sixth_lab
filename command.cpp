@@ -55,19 +55,41 @@ void DeleteCommand::undoit(Prototype*obj) {
     obj->showProto();
 }
 
-GroupCommand::GroupCommand(MyStorage *external) : Command(external)
+GroupCommand::GroupCommand(MyStorage *external, QWidget*parent) : Command(external), parent(parent)
 {
-    ingroup = new Group;
+    ingroup = new Group(parent);
 }
 
 void GroupCommand::doit(Prototype *obj)
 {
-
+    ingroup->push(external->exclude(obj));
+    obj->ClearSelect();
 }
 
 void GroupCommand::undoit(Prototype *obj)
 {
+    external->add(ingroup->exclude_first());
+    obj->SetSelect();
+}
 
+void GroupCommand::execute()
+{
+
+    ingroup->SetSelect();
+    external->add(ingroup);
+    for(internal->first();!internal->eol();internal->next()){
+        doit(internal->getObject());
+    }
+}
+
+void GroupCommand::unexecute()
+{
+    ingroup->ClearSelect();
+    external->exclude(ingroup);
+    for(internal->first();!internal->eol();internal->next()){
+        undoit(internal->getObject());
+    }
+    // delete ingroup;
 }
 
 EditColorCommand::EditColorCommand(MyStorage *external, const QColor &color) : Command(external), color(color)
