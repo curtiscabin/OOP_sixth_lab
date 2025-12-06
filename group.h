@@ -17,7 +17,6 @@ public:
 
     void updateSize();
 
-
     void push(Prototype* obj);
 
     Prototype *exclude_first();
@@ -43,6 +42,10 @@ public:
     void Save(QTextStream& out) override;
 
     void Load(QTextStream& in) override;
+
+    void hideProto() override;
+
+    void showProto() override;
 
 };
 

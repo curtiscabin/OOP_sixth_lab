@@ -123,3 +123,17 @@ void Group::Load(QTextStream &in) {
     show();
     this->raise();
 }
+
+void Group::hideProto() {
+    hide();
+    for(group_store->first();!group_store->eol();group_store->next()){
+        group_store->getObject()->hide();
+    }
+}
+
+void Group::showProto() {
+    show();
+    for(group_store->first();!group_store->eol();group_store->next()){
+        group_store->getObject()->show();
+    }
+}

@@ -118,7 +118,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
 
     if (key == Qt::Key_Delete){
         qDebug()<<"Key is Delete";
-        store->deleteCircles();
+        com = new DeleteCommand(store);
+        com->execute();
+        undo.push(com);
+        com = nullptr;
     }
     else if (key == Qt::Key_O){
         qDebug()<<"Key is O";

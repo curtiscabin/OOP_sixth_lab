@@ -49,6 +49,10 @@ public:
 
     virtual QString getSymbol() = 0;
 
+    virtual void hideProto() = 0;
+
+    virtual void showProto() = 0;
+
 signals:
     void editPressed(Prototype *self);
 

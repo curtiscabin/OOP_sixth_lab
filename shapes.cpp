@@ -141,6 +141,14 @@ void Shape::Load(QTextStream &in) {
     show();
 }
 
+void Shape::hideProto(){
+    hide();
+}
+
+void Shape::showProto(){
+    show();
+}
+
 Circle::Circle(const QPoint &b, const QPoint &e, QWidget *parent) : Shape(b, e, parent){
     qDebug()<<"Created Circle";
 }

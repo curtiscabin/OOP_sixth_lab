@@ -3,6 +3,12 @@
 
 Command::Command(MyStorage *external) : external(external) {
     internal = new MyStorage();
+    for(external->first();!external->eol();external->next()){
+        Prototype*obj = external->getObject();
+        if(obj->isSelect_()){
+            internal->add(obj);
+        }
+    }
 }
 
 Command::~Command(){
@@ -14,12 +20,7 @@ Command::~Command(){
 }
 
 MoveCommand::MoveCommand(QPoint delta, MyStorage *external) : delta(delta), Command(external){
-    for(external->first();!external->eol();external->next()){
-        Prototype*obj = external->getObject();
-        if(obj->isSelect_()){
-            internal->add(obj);
-        }
-    }
+
 }
 
 void MoveCommand::execute() {
@@ -35,25 +36,22 @@ void MoveCommand::unexecute() {
 }
 
 DeleteCommand::DeleteCommand(MyStorage *external): Command(external){
+
 }
 
 void DeleteCommand::execute() {
-    for(external->first();!external->eol();){
-        Prototype*obj = external->getObject();
-        if(obj->isSelect_()){
-            internal->add(external->exclude(obj));
-            obj->hide();
-        }
-        else external->next();
+    for(internal->first();!internal->eol();internal->next()){
+        Prototype*obj = internal->getObject();
+        external->exclude(obj);
+        obj->hideProto();
     }
 }
 
 void DeleteCommand::unexecute() {
-    internal->first();
-    while(!internal->isEmpty()){
-        Prototype*obj = internal->exclude_first();
+    for(internal->first();!internal->eol();internal->next()){
+        Prototype*obj = internal->getObject();
         external->add(obj);
-        obj->show();
+        obj->showProto();
     }
 }
 
