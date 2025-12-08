@@ -209,10 +209,6 @@ void MainWindow::on_pushButton_group_clicked()
             connect(group_maybe, &Prototype::editPressed, this, &MainWindow::onPrototypeEditPressed);
         }
     }
-
-
-
-
 }
 
 

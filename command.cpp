@@ -68,6 +68,7 @@ void GroupCommand::doit(Prototype *obj)
 
 void GroupCommand::undoit(Prototype *obj)
 {
+    if(ingroup)
     external->add(ingroup->exclude_first());
     obj->SetSelect();
 }
@@ -89,7 +90,6 @@ void GroupCommand::unexecute()
     for(internal->first();!internal->eol();internal->next()){
         undoit(internal->getObject());
     }
-    // delete ingroup;
 }
 
 EditColorCommand::EditColorCommand(MyStorage *external, const QColor &color) : Command(external), color(color)
