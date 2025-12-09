@@ -4,6 +4,7 @@
 #include<QString>
 #include "Prototype.h"
 #include"node.h"
+#include"protofactory.h"
 
 class MyStorage {
     Node *head;
@@ -38,8 +39,6 @@ public:
     Prototype* exclude(Prototype* obj);
 
     Prototype* exclude_first();
-
-    Prototype*createProto(QTextStream &in, QWidget* parent = nullptr);
 
     void SaveSelf(QTextStream &out);
 

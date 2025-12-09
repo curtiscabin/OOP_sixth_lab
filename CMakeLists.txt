@@ -33,6 +33,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         shapes.cpp
         node.h node.cpp
         command.h command.cpp
+        afactory.h afactory.cpp
+        protofactory.h protofactory.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

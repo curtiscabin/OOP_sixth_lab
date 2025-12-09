@@ -120,30 +120,6 @@ Prototype *MyStorage::exclude_first(){
     return exclude(head->prototype);
 }
 
-Prototype *MyStorage::createProto(QTextStream &in, QWidget *parent){
-    QString sym = in.readLine();
-    if(sym == "C"){
-        qDebug()<<"return Circle";
-        return new Circle(parent);
-    }
-    else if(sym == "R"){
-        qDebug()<<"return Circle";
-        return new Rect(parent);
-    }
-    else if(sym == "T"){
-        qDebug()<<"return Circle";
-        return new Triangle(parent);
-    }
-    else if(sym == "S"){
-        qDebug()<<"return Circle";
-        return new Section(parent);
-    }
-    else if(sym == "G"){
-        qDebug()<<"return Group";
-        return new Group(parent);
-    }
-}
-
 void MyStorage::SaveSelf(QTextStream &out){
     out<<get_size()<<"\n";
     for(first();!eol();next()){
@@ -153,10 +129,11 @@ void MyStorage::SaveSelf(QTextStream &out){
 
 void MyStorage::LoadFrom(QTextStream &in, QWidget *parent){
     Prototype*obj;
+    ProtoFactory factory;
     QString line = in.readLine();
     int size = line.toInt();
     for(int i = 0 ; i<size; i++){
-        obj = createProto(in, parent);
+        obj = factory.createProto(in, parent);
         obj->Load(in);
         add(obj);
     }
