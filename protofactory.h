@@ -10,7 +10,7 @@ class ProtoFactory : public afactory
 public:
     ProtoFactory() {}
 
-    Prototype* createProto(QTextStream&in, QWidget*parent) override;
+    Prototype* createProto(QTextStream&in, QWidget*parent, afactory*fact) override;
 };
 
 #endif // PROTOFACTORY_H

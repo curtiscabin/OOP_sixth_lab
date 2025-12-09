@@ -127,13 +127,12 @@ void MyStorage::SaveSelf(QTextStream &out){
     }
 }
 
-void MyStorage::LoadFrom(QTextStream &in, QWidget *parent){
+void MyStorage::LoadFrom(QTextStream &in, QWidget *parent, afactory* fact){
     Prototype*obj;
-    ProtoFactory factory;
     QString line = in.readLine();
     int size = line.toInt();
     for(int i = 0 ; i<size; i++){
-        obj = factory.createProto(in, parent);
+        obj = fact->createProto(in, parent, fact);
         obj->Load(in);
         add(obj);
     }
@@ -150,12 +149,12 @@ void MyStorage::SaveOpen(const QString &filename)
     }
 }
 
-void MyStorage::LoadOpen(const QString &filename, QWidget *parent)
+void MyStorage::LoadOpen(const QString &filename, QWidget *parent, afactory* fact)
 {
     QFile file(filename);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream in(&file);
-        LoadFrom(in, parent);
+        LoadFrom(in, parent, fact);
         file.close();
     }
 }

@@ -233,10 +233,11 @@ void MainWindow::on_pushButton_ungroup_clicked()
 void MainWindow::on_LoadFile_triggered()
 {
     filename = QFileDialog::getOpenFileName(this, "Открыть файл", "C:\\my_projects\\qt_projects\\OOP_sixth_lab\\saves", "Текстовые файлы (*.txt);;Все файлы (*.*)");
+    afactory* fact = new ProtoFactory;
 
     if (!filename.isEmpty()) {
         qDebug() << "Выбран файл:" << filename;
-        store->LoadOpen(filename, this);
+        store->LoadOpen(filename, this, fact);
     }
 
 

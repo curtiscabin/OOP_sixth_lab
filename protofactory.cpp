@@ -1,6 +1,6 @@
 #include "protofactory.h"
 
-Prototype *ProtoFactory::createProto(QTextStream&in, QWidget *parent)
+Prototype *ProtoFactory::createProto(QTextStream&in, QWidget *parent, afactory*fact)
 {
     QString sym = in.readLine();
     if(sym == "C"){
@@ -21,6 +21,6 @@ Prototype *ProtoFactory::createProto(QTextStream&in, QWidget *parent)
     }
     else if(sym == "G"){
         qDebug()<<"return Group";
-        return new Group(parent);
+        return new Group(parent, fact);
     }
 }

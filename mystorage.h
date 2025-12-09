@@ -42,11 +42,11 @@ public:
 
     void SaveSelf(QTextStream &out);
 
-    void LoadFrom(QTextStream &in, QWidget*parent);
+    void LoadFrom(QTextStream &in, QWidget*parent, afactory* fact);
 
     void SaveOpen(const QString &filename);
 
-    void LoadOpen(const QString &filename, QWidget*parent);
+    void LoadOpen(const QString &filename, QWidget*parent, afactory* fact);
 
 };
 

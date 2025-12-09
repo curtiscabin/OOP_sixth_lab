@@ -5,6 +5,11 @@ Group::Group(QWidget *parent) : Prototype(parent) {
     SetSelect();
 }
 
+Group::Group(QWidget *parent, afactory*fact) : Prototype(parent), fact(fact) {
+    group_store = new MyStorage;
+    SetSelect();
+}
+
 Group::~Group() {
     delete group_store;
 }
@@ -117,7 +122,7 @@ void Group::Save(QTextStream &out) {
 }
 
 void Group::Load(QTextStream &in) {
-    group_store->LoadFrom(in, parentWidget());
+    group_store->LoadFrom(in, parentWidget(), fact);
     ClearSelect();
     updateSize();
     show();

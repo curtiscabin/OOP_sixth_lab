@@ -9,9 +9,12 @@ class MyStorage;
 class Group : public Prototype{
 Q_OBJECT
     MyStorage* group_store = nullptr;
+    afactory* fact = nullptr;
 
 public:
     Group(QWidget* parent = nullptr);
+
+    Group(QWidget* parent, afactory*fact);
 
     ~Group();
 

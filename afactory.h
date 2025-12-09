@@ -7,7 +7,7 @@ class afactory
 public:
     afactory();
 
-    virtual Prototype* createProto(QTextStream&in, QWidget*parent) = 0;
+    virtual Prototype* createProto(QTextStream&in, QWidget*parent, afactory* fact) = 0;
 };
 
 #endif // AFACTORY_H
