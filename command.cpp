@@ -1,5 +1,8 @@
 #include "command.h"
 
+Command::Command() {
+
+}
 
 Command::Command(MyStorage *external) : external(external) {
     internal = new MyStorage();
@@ -68,9 +71,9 @@ void GroupCommand::doit(Prototype *obj)
 
 void GroupCommand::undoit(Prototype *obj)
 {
-    if(ingroup)
     external->add(ingroup->exclude_first());
     obj->SetSelect();
+    obj->EditRaise();
 }
 
 void GroupCommand::execute()
@@ -89,6 +92,80 @@ void GroupCommand::unexecute()
     external->exclude(ingroup);
     for(internal->first();!internal->eol();internal->next()){
         undoit(internal->getObject());
+    }
+}
+
+UnGroupCommand::UnGroupCommand(MyStorage *external, QWidget *parent) : parent(parent), Command()
+{
+    this->external = external;
+    internal = new MyStorage();
+    for (external->first();!external->eol();external->next()){
+        Group*group_maybe = dynamic_cast<Group*>(external->getObject());
+        if(group_maybe && group_maybe->isSelect_()){
+            internal->add(group_maybe);
+        }
+    }
+}
+
+void UnGroupCommand::doit(Prototype *obj)
+{
+    Group* gr = dynamic_cast<Group*>(obj);
+    if (kids.isEmpty()) {
+        kids.push_back(new MyStorage);
+        while(!gr->isEmpty()){
+            Prototype* proto = gr->exclude_first();
+            external->add(proto);
+            kids.last()->add(proto);
+            proto->SetSelect();
+            proto->EditRaise();
+        }
+    } else {
+        MyStorage* store = kids.first();
+        for(store->first(); !store->eol(); store->next()){
+            Prototype* proto = gr->exclude_first();
+            if (proto) {
+                external->add(proto);
+                proto->SetSelect();
+                proto->EditRaise();
+            }
+        }
+        kids.append(kids.takeFirst());
+    }
+
+}
+
+void UnGroupCommand::undoit(Prototype *obj)
+{
+    Group* gr = dynamic_cast<Group*>(obj);
+    if (!kids.isEmpty()) {
+        MyStorage* store = kids.first();
+        for(store->first(); !store->eol(); store->next()){
+            Prototype* p = store->getObject();
+            external->exclude(p);
+            p->ClearSelect();
+            gr->push(p);
+        }
+        kids.append(kids.takeFirst());
+    }
+}
+
+void UnGroupCommand::execute()
+{
+    for(internal->first();!internal->eol();internal->next()){
+        Prototype*group = internal->getObject();
+        group->ClearSelect();
+        external->exclude(group);
+        doit(group);
+    }
+}
+
+void UnGroupCommand::unexecute()
+{
+    for(internal->first();!internal->eol();internal->next()){
+        Prototype*group = internal->getObject();
+        external->add(group);
+        undoit(group);
+        group->SetSelect();
     }
 }
 

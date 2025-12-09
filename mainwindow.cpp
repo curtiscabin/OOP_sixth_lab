@@ -214,26 +214,16 @@ void MainWindow::on_pushButton_group_clicked()
 
 void MainWindow::on_pushButton_ungroup_clicked()
 {
-    MyStorage*forUnGroup = nullptr;
-    for(store->first();!store->eol();){
-        Prototype*group_maybe = store->getObject();
-        if(group_maybe->isSelect_() && dynamic_cast<Group*>(group_maybe)){
-            if(!forUnGroup)forUnGroup = new MyStorage();
-            forUnGroup->add(store->exclude(group_maybe));
-        }
-        else store->next();
-    }
+    com = new UnGroupCommand(store, this);
+    com->execute();
+    undo.push(com);
+    eraseRedo();
 
-    if(forUnGroup){
-        while(!forUnGroup->isEmpty()){
-            Group*ungroup = dynamic_cast<Group*>(forUnGroup->exclude_first());
-            while(!ungroup->isEmpty()){
-                Prototype* obj= ungroup->exclude_first();
-                connect(obj, &Prototype::editPressed,this, &MainWindow::onPrototypeEditPressed);
-                store->add(obj);
-                obj->SetSelect();
-            }
-            delete ungroup;
+    for(store->first();!store->eol();store->next()){
+        Prototype* proto = store->getObject();
+        if(proto->isSelect_())
+        {
+            connect(proto, &Prototype::editPressed, this, &MainWindow::onPrototypeEditPressed);
         }
     }
 

@@ -10,6 +10,8 @@ protected:
     MyStorage*external;
     MyStorage*internal;
 public:
+    Command();
+
     Command(MyStorage*external);
 
     ~Command();
@@ -49,6 +51,22 @@ class GroupCommand : public Command {
     QWidget*parent;
 public:
     GroupCommand(MyStorage* external, QWidget*parent);
+
+    void doit(Prototype *obj) override;
+
+    void undoit(Prototype *obj) override;
+
+    void execute() override;
+
+    void unexecute() override;
+};
+
+class UnGroupCommand : public Command {
+    Group*inUngroup;
+    QWidget*parent;
+    QList<MyStorage*>kids;
+public:
+    UnGroupCommand(MyStorage* external, QWidget*parent);
 
     void doit(Prototype *obj) override;
 

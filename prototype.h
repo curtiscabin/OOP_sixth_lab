@@ -55,6 +55,10 @@ public:
 
     virtual QColor getColor() = 0;
 
+    void EditRaise(){
+        edit->raise();
+    }
+
 signals:
     void editPressed(Prototype *self);
 
